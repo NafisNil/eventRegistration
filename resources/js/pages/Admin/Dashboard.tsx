@@ -1,7 +1,6 @@
 import React from 'react';
 import { Head } from '@inertiajs/react';
-import AdminLayout from '../../Layouts/AdminLayout';
-import { StatCards } from '../../Components/Admin/StatCards';
+import AdminLayout from '@/layouts/AdminLayout';
 import { StatCard } from '@/components/Admin/StatCard';
 
 export default function Dashboard() {

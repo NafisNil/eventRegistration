@@ -11,9 +11,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen, currentRout
   const menuItems = [
     { label: 'Overview', route: 'dashboard', icon: '📊', href: '/dashboard' },
     { label: 'Hero Section', route: 'heroes.index', icon: '🦸', href: '/heroes' },
-    { label: 'Keynote Speakers', route: 'speakers', icon: '🎤', href: '#' },
-    { label: 'Registrations', route: 'registrations', icon: '🎟️', href: '#' },
-    { label: 'Topics & Objectives', route: 'topics', icon: '🌿', href: '#' },
+    { label: 'Event Stats', route: 'event-stats', icon: '📊', href: '/event-stats' },
+    { label: 'About', route: 'about.index', icon: '🎟️', href: '/about' },
+    { label: 'Guest', route: 'guests.index', icon: '🌿', href: '/guests' },
     { label: 'Sponsors & Partners', route: 'sponsors', icon: '🤝', href: '#' },
     { label: 'Media & Branding', route: 'media', icon: '📣', href: '#' },
     { label: 'Settings', route: 'settings', icon: '⚙️', href: '#' },

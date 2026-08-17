@@ -1,7 +1,7 @@
 import React, { useState, PropsWithChildren } from 'react';
-import { Sidebar } from '../Components/Admin/Sidebar';
-import { Navbar } from '../Components/Admin/Navbar';
-import { Footer } from '../Components/Admin/Footer';
+import { Sidebar } from '../components/Admin/Sidebar';
+import { Navbar } from '../components/Admin/Navbar';
+import { Footer } from '../components/Admin/Footer';
 
 interface AdminLayoutProps {
   currentRoute?: string;
