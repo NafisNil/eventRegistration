@@ -3,17 +3,15 @@ import React from 'react';
 import Swal from 'sweetalert2';
 import AdminLayout from '@/layouts/AdminLayout';
 
-interface Guest {
+interface ProgramHighlight {
   id: number;
-  name: string;
-  designation: string;
+  title: string;
   description?: string | null;
   logo?: string | null;
-  expertise?: string | null;
 }
 
 interface IndexProps {
-  guests?: Guest[];
+  programHighlights?: ProgramHighlight[];
 }
 
 const previewText = (value?: string | null) => {
@@ -30,21 +28,10 @@ const previewText = (value?: string | null) => {
   return `${plainText.slice(0, 100)}...`;
 };
 
-const expertiseBadges = (value?: string | null) => {
-  if (!value) {
-    return [];
-  }
-
-  return value
-    .split(',')
-    .map((item) => item.trim())
-    .filter(Boolean);
-};
-
-export default function Index({ guests = [] }: IndexProps) {
+export default function Index({ programHighlights = [] }: IndexProps) {
   const handleDelete = (id: number) => {
     Swal.fire({
-      title: 'Delete guest entry?',
+      title: 'Delete entry?',
       text: 'This action cannot be undone.',
       icon: 'warning',
       showCancelButton: true,
@@ -56,13 +43,13 @@ export default function Index({ guests = [] }: IndexProps) {
         return;
       }
 
-      router.delete(`/guests/${id}`, {
+      router.delete(`/program-highlights/${id}`, {
         preserveScroll: true,
         onSuccess: () => {
           Swal.fire({
             icon: 'success',
-            title: 'Guest deleted',
-            text: 'The guest entry was deleted successfully.',
+            title: 'Item deleted',
+            text: 'The program highlight was deleted successfully.',
             timer: 2000,
             showConfirmButton: false,
           });
@@ -73,76 +60,52 @@ export default function Index({ guests = [] }: IndexProps) {
 
   return (
     <>
-      <Head title="Guests" />
+      <Head title="Program Highlights" />
 
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-3 rounded-2xl bg-linear-to-r from-emerald-900 via-emerald-800 to-teal-900 p-6 text-white shadow-sm">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-emerald-200">Media & Branding</p>
-            <h1 className="mt-2 text-2xl font-bold">Guest Management</h1>
+            <h1 className="mt-2 text-2xl font-bold">Program Highlights</h1>
           </div>
 
-            <Link
-              href="/guests/create"
-              className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-50"
-            >
-              Add Guest
-            </Link>
-
+          <Link
+            href="/program-highlights/create"
+            className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-50"
+          >
+            Add Program Highlight
+          </Link>
         </div>
 
         <div className="overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
-          {guests.length === 0 ? (
-            <div className="p-8 text-center text-slate-500">No guest entries found yet.</div>
+          {programHighlights.length === 0 ? (
+            <div className="p-8 text-center text-slate-500">No program highlights found yet.</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-emerald-200 text-left text-sm text-slate-700">
                 <thead className="bg-emerald-50/70 text-slate-700">
                   <tr>
-                    <th className="px-4 py-3 font-semibold">Name</th>
-                    <th className="px-4 py-3 font-semibold">Designation</th>
-                    <th className="px-4 py-3 font-semibold">Logo</th>
+                    <th className="px-4 py-3 font-semibold">Title</th>
                     <th className="px-4 py-3 font-semibold">Description</th>
-                    <th className="px-4 py-3 font-semibold">Expertise</th>
+                    <th className="px-4 py-3 font-semibold">Logo</th>
                     <th className="px-4 py-3 text-right font-semibold">Actions</th>
                   </tr>
                 </thead>
 
                 <tbody className="divide-y divide-emerald-100">
-                  {guests.map((guest) => (
-                    <tr key={guest.id} className="align-top">
-                      <td className="px-4 py-4 font-medium text-slate-800">{guest.name}</td>
+                  {programHighlights.map((programHighlight) => (
+                    <tr key={programHighlight.id} className="align-top">
+                      <td className="px-4 py-4 font-medium text-slate-800">{programHighlight.title}</td>
 
-                      <td className="px-4 py-4 text-slate-700">{guest.designation}</td>
+                      <td className="px-4 py-4 text-slate-700">{previewText(programHighlight.description)}</td>
 
                       <td className="px-4 py-4">
-                        {guest.logo ? (
+                        {programHighlight.logo ? (
                           <img
-                            src={`/storage/${guest.logo}`}
-                            alt={guest.name}
-                            className="h-14 w-14 rounded-lg object-cover border border-emerald-200 bg-emerald-50"
+                            src={`/storage/${programHighlight.logo}`}
+                            alt={programHighlight.title}
+                            className="h-14 w-14 rounded-lg border border-emerald-100  object-cover"
                           />
-                        ) : (
-                          '—'
-                        )}
-                      </td>
-
-                      <td className="px-4 py-4 text-slate-700">
-                        {previewText(guest.description)}
-                      </td>
-
-                      <td className="px-4 py-4">
-                        {guest.expertise ? (
-                          <div className="flex flex-wrap gap-2">
-                            {expertiseBadges(guest.expertise).map((item, index) => (
-                              <span
-                                key={`${guest.id}-${item}-${index}`}
-                                className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700"
-                              >
-                                {item}
-                              </span>
-                            ))}
-                          </div>
                         ) : (
                           '—'
                         )}
@@ -151,14 +114,14 @@ export default function Index({ guests = [] }: IndexProps) {
                       <td className="px-4 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <Link
-                            href={`/guests/${guest.id}/edit`}
+                            href={`/program-highlights/${programHighlight.id}/edit`}
                             className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700 transition hover:bg-emerald-100"
                           >
                             Edit
                           </Link>
                           <button
                             type="button"
-                            onClick={() => handleDelete(guest.id)}
+                            onClick={() => handleDelete(programHighlight.id)}
                             className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100"
                           >
                             Delete
@@ -178,5 +141,5 @@ export default function Index({ guests = [] }: IndexProps) {
 }
 
 Index.layout = (page: React.ReactNode) => (
-  <AdminLayout currentRoute="guests.index">{page}</AdminLayout>
+  <AdminLayout currentRoute="program-highlights.index">{page}</AdminLayout>
 );

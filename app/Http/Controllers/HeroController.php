@@ -56,6 +56,7 @@ class HeroController extends Controller
 
         $image = $this->imageManager()->decodePath($file->getRealPath());
         
+        
         $image->scaleDown(1400)->save(Storage::disk('public')->path($fileName));
 
         return $fileName;

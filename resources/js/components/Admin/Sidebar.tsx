@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+import { Label } from '@radix-ui/react-dropdown-menu';
 import React from 'react';
 
 interface SidebarProps {
@@ -14,9 +15,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen, currentRout
     { label: 'Event Stats', route: 'event-stats', icon: '📊', href: '/event-stats' },
     { label: 'About', route: 'about.index', icon: '🎟️', href: '/about' },
     { label: 'Guest', route: 'guests.index', icon: '🌿', href: '/guests' },
-    { label: 'Sponsors & Partners', route: 'sponsors', icon: '🤝', href: '#' },
-    { label: 'Media & Branding', route: 'media', icon: '📣', href: '#' },
-    { label: 'Settings', route: 'settings', icon: '⚙️', href: '#' },
+    { label: 'Program Highlights', route: 'program-highlights.index', icon: '🤝', href: '/program-highlights' },
+    { label: 'Schedule', route: 'schedules.index', icon: '📣', href: '/schedules' },
+    { label: 'Partnership Category', route: 'partnership-categories.index', icon: '⚙️', href: '/partnership-categories' },
+    { label: 'Partner', route: 'partners.index', icon: '🤝', href: '/partners' },
+    { label: 'Announcements', route: 'announcements.index', icon: '📢', href: '/announcements' },
+    { label: 'Location', route: 'locations.index', icon: '📍', href: '/locations' },
+    { label: 'Social Media', route: 'social-media.index', icon: '🌐', href: '/social-media' },
+    { label: 'Contact Messages', route: 'contact.messages', icon: '✉️', href: '/contact-messages' },
+    { label: 'User Registrations', route: 'user-registrations.index', icon: '📝', href: '/user-registrations' },
   ];
 
   return (

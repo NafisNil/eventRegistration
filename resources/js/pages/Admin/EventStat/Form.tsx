@@ -17,6 +17,7 @@ interface EventStatFormProps {
     time?: string;
     registration_deadline?: string;
     target_participants?: string | null;
+    organizer?: string | null;
   };
   submitLabel?: string;
   processing?: boolean;
@@ -35,6 +36,7 @@ export default function EventStatForm({
   const [time, setTime] = useState(initialData?.time ?? '');
   const [registrationDeadline, setRegistrationDeadline] = useState(initialData?.registration_deadline ?? '');
   const [targetParticipants, setTargetParticipants] = useState(initialData?.target_participants ?? '');
+  const [organizer, setOrganizer] = useState(initialData?.organizer ?? '');
 
   const editor = useEditor({
     extensions: [StarterKit, TextStyle, Color, FontSize],
@@ -74,6 +76,7 @@ export default function EventStatForm({
     formData.append('event_date', eventDate);
     formData.append('time', time);
     formData.append('registration_deadline', registrationDeadline);
+    formData.append('organizer', organizer);
 
     if (targetParticipants.trim()) {
       formData.append('target_participants', targetParticipants);
@@ -217,6 +220,8 @@ export default function EventStatForm({
           />
         </div>
 
+
+
         <div className="space-y-2">
           <Label htmlFor="time" className="block text-sm font-medium text-slate-700">
             Time
@@ -241,6 +246,21 @@ export default function EventStatForm({
             type="date"
             value={registrationDeadline}
             onChange={(event) => setRegistrationDeadline(event.target.value)}
+            className="border-emerald-200 text-black focus-visible:ring-emerald-200"
+          />
+        </div>
+
+
+                <div className="space-y-2">
+          <Label htmlFor="organizer" className="block text-sm font-medium text-slate-700">
+            Organizer 
+          </Label>
+          <Input
+            id="organizer"
+            name="organizer"
+            type="text"
+            value={organizer}
+            onChange={(event) => setOrganizer(event.target.value)}
             className="border-emerald-200 text-black focus-visible:ring-emerald-200"
           />
         </div>

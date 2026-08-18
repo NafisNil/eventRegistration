@@ -241,7 +241,7 @@ export default function ProgramHighlightForm({
               <img
                 src={currentPreview.startsWith('blob:') ? currentPreview : `/storage/${currentPreview}`}
                 alt="Guest preview"
-                className="h-80 w-60 rounded-lg object-cover"
+                className="h-20 w-20 rounded-lg object-cover"
               />
             </div>
           )}

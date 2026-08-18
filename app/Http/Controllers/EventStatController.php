@@ -41,6 +41,7 @@ class EventStatController extends Controller
             'event_date' => 'required|date',
             'time' => 'required|string',
             'registration_deadline' => 'required|date',
+            
         ]);
 
         $eventStat = EventStat::create($request->all());
