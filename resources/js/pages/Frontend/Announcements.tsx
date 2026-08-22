@@ -21,11 +21,19 @@ interface LocationRecord {
   email?: string | null;
 }
 
+interface SocialMediaRecord {
+  facebook?: string | null;
+  linkedin?: string | null;
+  youtube?: string | null;
+  twitter?: string | null;
+}
+
 interface AnnouncementsProps {
   announcements?: AnnouncementRecord[];
   eventStat?: EventStatRecord | null;
   about?: AboutRecord | null;
   location?: LocationRecord | null;
+  socialMedia?: SocialMediaRecord | null;
 }
 
 const formatAnnouncementDate = (date?: string | null) => {
@@ -43,6 +51,7 @@ export default function AnnouncementsPage({
   eventStat,
   about,
   location,
+  socialMedia,
 }: AnnouncementsProps) {
   const eventName = eventStat?.event_name || "National Innovation & Digital Governance Summit 2026";
   const footerDescription = about?.description || "A one-day national summit bringing together policymakers, technologists, academics and civil society to shape the next decade of digital public infrastructure.";
@@ -79,7 +88,7 @@ export default function AnnouncementsPage({
         </div>
       </main>
 
-      <Footer eventName={eventName} description={footerDescription} email={footerEmail} />
+      <Footer eventName={eventName} description={footerDescription} email={footerEmail} socialMedia={socialMedia} />
     </div>
   );
 }

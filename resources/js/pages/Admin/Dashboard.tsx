@@ -3,31 +3,13 @@ import { Head } from '@inertiajs/react';
 import AdminLayout from '@/layouts/AdminLayout';
 import { StatCard } from '@/components/Admin/StatCard';
 
-export default function Dashboard() {
+export default function Dashboard({ userRegistrations = 0 }: { userRegistrations?: number }) {
   const stats = [
     {
       title: 'Total Registrations',
-      value: '1,234',
-      subtitle: '+12% from last week',
+      value: userRegistrations.toLocaleString(),
+      subtitle: 'Live registration count',
       icon: '📋',
-    },
-    {
-      title: 'Pending Approvals',
-      value: '48',
-      subtitle: '8 awaiting verification',
-      icon: '⏳',
-    },
-    {
-      title: 'Verified Attendees',
-      value: '987',
-      subtitle: '80% confirmation rate',
-      icon: '✓',
-    },
-    {
-      title: 'Event Sessions',
-      value: '24',
-      subtitle: '6 keynote presentations',
-      icon: '🎤',
     },
   ];
 

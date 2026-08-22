@@ -38,6 +38,7 @@ interface GuestRecord {
   description?: string | null;
   logo?: string | null;
   expertise?: string | null;
+  type?: string | null;
 }
 
 interface ScheduleRecord {
@@ -74,6 +75,13 @@ interface LocationRecord {
   map?: string | null;
 }
 
+interface SocialMediaRecord {
+  facebook?: string | null;
+  linkedin?: string | null;
+  youtube?: string | null;
+  twitter?: string | null;
+}
+
 interface WelcomeProps {
   hero?: HeroRecord | null;
   eventStat?: EventStatRecord | null;
@@ -83,9 +91,10 @@ interface WelcomeProps {
   schedules?: ScheduleRecord[];
   partners?: PartnerRecord[];
   location?: LocationRecord | null;
+  socialMedia?: SocialMediaRecord | null;
 }
 
-export default function Welcome({ hero, eventStat, about, guests = [], programHighlights = [], schedules = [], partners = [], location }: WelcomeProps) {
+export default function Welcome({ hero, eventStat, about, guests = [], programHighlights = [], schedules = [], partners = [], location, socialMedia }: WelcomeProps) {
   const eventName = eventStat?.event_name || "National Innovation & Digital Governance Summit 2026";
   const eventLocation = eventStat?.location || "Grand National Convention Centre";
   const eventDate = eventStat?.event_date || "2026-11-14";
@@ -111,6 +120,7 @@ export default function Welcome({ hero, eventStat, about, guests = [], programHi
             location={eventLocation}
             description={hero?.description || "A one-day national summit bringing together policymakers, technologists, academics and civil society to shape the next decade of digital public infrastructure."}
             logo={hero?.logo || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1920&q=80"}
+            partners={partners}
           />
           <QuickStats
             eventDate={formattedDate}
@@ -132,12 +142,13 @@ export default function Welcome({ hero, eventStat, about, guests = [], programHi
           <HighlightsSection highlights={programHighlights} />
           <ScheduleSection schedules={schedules} />
           <OrganizersSection partners={partners} />
-          <CTASection />
+          <CTASection registrationDeadline={registrationDeadline} />
         </main>
         <Footer
           eventName={eventName}
           description={about?.description || "A one-day national summit bringing together policymakers, technologists, academics and civil society to shape the next decade of digital public infrastructure."}
           email={location?.email || "secretariat@digitalsummit.gov.bd"}
+          socialMedia={socialMedia}
         />
       </div>
     </>

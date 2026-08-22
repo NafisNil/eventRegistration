@@ -13,6 +13,8 @@ interface EventStat {
   time: string;
   registration_deadline: string;
   target_participants?: string | null;
+  organizer?: string | null;
+  venue?: string | null;
 }
 
 interface EditProps {
@@ -66,6 +68,8 @@ export default function Edit({ eventStat }: EditProps) {
             time: eventStat.time,
             registration_deadline: eventStat.registration_deadline,
             target_participants: eventStat.target_participants,
+            organizer: eventStat.organizer,
+            venue: eventStat.venue,
           }}
           submitLabel="Update Event Stat"
           onSubmit={handleSubmit}

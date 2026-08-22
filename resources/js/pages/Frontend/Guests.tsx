@@ -9,6 +9,7 @@ interface GuestRecord {
   description?: string | null;
   logo?: string | null;
   expertise?: string | null;
+  type?: string | null;
 }
 
 interface AboutRecord {
@@ -23,11 +24,19 @@ interface LocationRecord {
   email?: string | null;
 }
 
+interface SocialMediaRecord {
+  facebook?: string | null;
+  linkedin?: string | null;
+  youtube?: string | null;
+  twitter?: string | null;
+}
+
 interface GuestsProps {
   guests?: GuestRecord[];
   eventStat?: EventStatRecord | null;
   about?: AboutRecord | null;
   location?: LocationRecord | null;
+  socialMedia?: SocialMediaRecord | null;
 }
 
 const getPublicAssetUrl = (value?: string | null) => {
@@ -52,6 +61,20 @@ const truncateText = (value?: string | null, maxLength = 100) => {
   return `${plainText.slice(0, maxLength).trim()}...`;
 };
 
+const formatDescriptionText = (value?: string | null) => {
+  if (!value) return "Featured guest contributing to this event.";
+
+  return value
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>/gi, "\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/\n{3,}/g, "\n\n")
+    .replace(/\s+\n/g, "\n")
+    .trim();
+};
+
 const parseExpertiseTags = (value?: string | null) => {
   if (!value) return [];
 
@@ -61,7 +84,7 @@ const parseExpertiseTags = (value?: string | null) => {
     .filter(Boolean);
 };
 
-export default function GuestsPage({ guests = [], eventStat, about, location }: GuestsProps) {
+export default function GuestsPage({ guests = [], eventStat, about, location, socialMedia }: GuestsProps) {
   const [selectedGuest, setSelectedGuest] = useState<GuestRecord | null>(null);
 
   const eventName = eventStat?.event_name || "National Innovation & Digital Governance Summit 2026";
@@ -75,18 +98,22 @@ export default function GuestsPage({ guests = [], eventStat, about, location }: 
       <Header eventName={eventName} />
 
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-2 gap-2.5 md:gap-5 md:grid-cols-2 xl:grid-cols-3">
           {guestList.map((guest) => {
             const logo = getPublicAssetUrl(guest.logo) || "https://images.unsplash.com/photo-1541534401786-2077eed87a74?w=1200&q=80";
             const preview = truncateText(guest.description ?? "", 100);
+            const guestTypeLabel = (guest.type || "Featured Guest").toUpperCase();
 
             return (
               <article
                 key={guest.id}
                 className="flex min-h-[300px] flex-col overflow-hidden rounded-2xl border border-emerald-100 bg-white shadow-[0_8px_24px_rgba(15,23,42,0.08)]"
               >
-                <div className="h-[200px] overflow-hidden bg-slate-100">
+                <div className="relative h-[200px] overflow-hidden bg-slate-100">
                   <img src={logo} alt={guest.name} className="h-full w-full object-cover" />
+                  <span className="absolute left-3 top-3 z-10 inline-flex items-center rounded-md bg-[#d8b877] px-2 py-1 text-[0.52rem] font-black uppercase tracking-[0.12em] text-slate-900 shadow-sm">
+                    {guestTypeLabel}
+                  </span>
                 </div>
 
                 <div className="flex flex-1 flex-col justify-between p-3.5">
@@ -119,59 +146,57 @@ export default function GuestsPage({ guests = [], eventStat, about, location }: 
       </main>
 
       {selectedGuest && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 px-4 py-6 backdrop-blur-[1px]">
-          <div className="relative w-full max-w-4xl overflow-hidden rounded-[1.5rem] border border-emerald-100 bg-[#f4f5f4] shadow-[0_18px_60px_rgba(15,23,42,0.22)]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 px-3 py-4 backdrop-blur-[1px] sm:px-4 sm:py-6">
+          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-[1.5rem] border border-emerald-100 bg-[#f4f5f4] shadow-[0_18px_60px_rgba(15,23,42,0.22)]">
             <button
               type="button"
               onClick={() => setSelectedGuest(null)}
-              className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-2xl text-emerald-700 transition hover:bg-emerald-100"
+              className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-2xl text-emerald-700 transition hover:bg-emerald-100 sm:right-4 sm:top-4 sm:h-10 sm:w-10"
               aria-label="Close profile"
             >
               ×
             </button>
 
-            <div className="px-5 py-6 sm:px-7 lg:px-8 lg:py-8">
-              <h2 className="pr-12 text-3xl font-semibold tracking-tight text-slate-800 sm:text-4xl">
+            <div className="px-4 py-5 sm:px-7 sm:py-6 lg:px-8 lg:py-8">
+              <h2 className="pr-10 text-2xl font-semibold tracking-tight text-slate-800 sm:pr-12 sm:text-3xl lg:text-4xl">
                 {selectedGuest.name}
               </h2>
 
-              <div className="mt-6 grid gap-6 lg:grid-cols-[260px_1fr] lg:items-start">
-                <div className="overflow-hidden rounded-[1.1rem] bg-slate-200">
+              <div className="mt-5 grid gap-4 sm:gap-5 lg:mt-6 lg:grid-cols-[220px_1fr] lg:items-start lg:gap-6">
+                <div className="relative overflow-hidden rounded-[1.1rem] bg-slate-200 lg:max-w-[220px]">
                   <img
                     src={getPublicAssetUrl(selectedGuest.logo) || "https://images.unsplash.com/photo-1541534401786-2077eed87a74?w=1200&q=80"}
                     alt={selectedGuest.name}
-                    className="h-full min-h-[280px] w-full object-cover"
+                    className="h-[280px] w-full object-cover sm:h-[320px] lg:h-[420px] lg:w-full lg:object-cover"
                   />
+                  <span className="absolute left-3 top-3 z-10 inline-flex items-center rounded-md bg-[#d8b877] px-2 py-1 text-[0.52rem] font-black uppercase tracking-[0.12em] text-slate-900 shadow-sm">
+                    {(selectedGuest.type || "Featured Guest").toUpperCase()}
+                  </span>
                 </div>
 
-                <div>
-                  <div className="text-[1rem] font-medium text-slate-700 sm:text-[1.2rem]">
+                <div className="min-w-0">
+                  <div className="text-sm font-medium text-slate-700 sm:text-[1rem] lg:text-[1.2rem]">
                     {selectedGuest.designation || "Guest speaker"}
                   </div>
 
                   {selectedGuest.expertise && (
-                    <div className="mt-3 inline-block text-sm font-medium italic text-slate-500">
+                    <div className="mt-3 inline-block text-xs font-medium italic text-slate-500 sm:text-sm">
                       {selectedGuest.expertise}
                     </div>
                   )}
 
-                  <div className="mt-4 text-lg font-semibold leading-tight text-slate-800 sm:text-[1.5rem]">
-                    Role in the programme: <span className="font-medium text-slate-700">Panelist: Inclusion by Design</span>
-                  </div>
 
-                  <div
-                    className="mt-4 max-w-2xl text-base leading-7 text-slate-700"
-                    dangerouslySetInnerHTML={{
-                      __html: selectedGuest.description || "Featured guest contributing to this event.",
-                    }}
-                  />
+
+                  <p className="mt-4 max-w-2xl whitespace-pre-line text-sm leading-6 text-slate-700 sm:text-base sm:leading-7">
+                    {formatDescriptionText(selectedGuest.description)}
+                  </p>
 
                   {parseExpertiseTags(selectedGuest.expertise).length > 0 && (
-                    <div className="mt-6 flex flex-wrap gap-3">
+                    <div className="mt-6 flex flex-wrap gap-2 sm:gap-3">
                       {parseExpertiseTags(selectedGuest.expertise).map((tag, index) => (
                         <span
                           key={`${tag}-${index}`}
-                          className="inline-flex items-center justify-center rounded-lg bg-slate-200/80 px-3 py-2 text-sm font-medium text-slate-700"
+                          className="inline-flex items-center justify-center rounded-lg bg-slate-200/80 px-2.5 py-1.5 text-xs font-medium text-slate-700 sm:px-3 sm:py-2 sm:text-sm"
                         >
                           {tag}
                         </span>
@@ -185,7 +210,7 @@ export default function GuestsPage({ guests = [], eventStat, about, location }: 
         </div>
       )}
 
-      <Footer eventName={eventName} description={footerDescription} email={footerEmail} />
+      <Footer eventName={eventName} description={footerDescription} email={footerEmail} socialMedia={socialMedia} />
     </div>
   );
 }

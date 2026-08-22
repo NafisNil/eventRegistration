@@ -1,19 +1,46 @@
 import React from "react";
 import { Link } from "@inertiajs/react";
-import { Mail } from "lucide-react";
+import { Facebook, Mail } from "lucide-react";
+
+interface SocialMediaRecord {
+  facebook?: string | null;
+  linkedin?: string | null;
+  youtube?: string | null;
+  twitter?: string | null;
+}
 
 interface FooterProps {
   eventName?: string;
   description?: string | null;
   email?: string | null;
+  socialMedia?: SocialMediaRecord | null;
 }
+
+const truncateFootDescription = (value?: string | null, maxLength = 200) => {
+  if (!value) return "";
+
+  const plainText = value
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (plainText.length <= maxLength) {
+    return plainText;
+  }
+
+  return `${plainText.slice(0, maxLength).trim()}...`;
+};
 
 export const Footer: React.FC<FooterProps> = ({
   eventName = "National Innovation & Digital Governance Summit 2026",
   description = "A one-day national summit bringing together policymakers, technologists, academics and civil society to shape the next decade of digital public infrastructure.",
   email = "secretariat@digitalsummit.gov.bd",
+  socialMedia,
 }) => {
-  const safeDescription = description ?? "";
+  const safeDescription = truncateFootDescription(description, 200);
+  const facebookUrl = socialMedia?.facebook?.trim();
 
   return (
     <footer className="border-t border-emerald-100 bg-[#f5f9f3] text-sm text-slate-600">
@@ -23,10 +50,7 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="flex items-center gap-3">
               <span className="text-base font-semibold text-slate-800">{eventName}</span>
             </div>
-            <div
-              className="max-w-md text-xs leading-relaxed text-slate-600 [&_p]:m-0 [&_p]:mb-2 last:[&_p]:mb-0"
-              dangerouslySetInnerHTML={{ __html: safeDescription }}
-            />
+            <p className="max-w-md text-xs leading-relaxed text-slate-600">{safeDescription}</p>
           </div>
 
           <div className="space-y-3 md:col-span-3">
@@ -45,6 +69,18 @@ export const Footer: React.FC<FooterProps> = ({
             <p className="flex items-center gap-2 text-xs text-slate-600">
               <Mail className="h-4 w-4 text-emerald-600" /> {email}
             </p>
+
+            {facebookUrl && (
+              <a
+                href={facebookUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Facebook"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-emerald-200 bg-white text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-50"
+              >
+                <Facebook className="h-4 w-4" />
+              </a>
+            )}
           </div>
         </div>
 

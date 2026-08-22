@@ -2,12 +2,17 @@ import React from "react";
 import { Link } from "@inertiajs/react";
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
 
+interface PartnerRecord {
+  name?: string | null;
+}
+
 interface HeroProps {
   eventName?: string;
   eventDate?: string;
   location?: string;
   description?: string;
   logo?: string;
+  partners?: PartnerRecord[];
 }
 
 const getPublicAssetUrl = (value?: string | null) => {
@@ -26,18 +31,24 @@ export const Hero: React.FC<HeroProps> = ({
   location = "Grand National Convention Centre",
   description = "A one-day national summit bringing together policymakers, technologists, academics and civil society to shape the next decade of digital public infrastructure.",
   logo = "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1920&q=80",
+  partners = [],
 }) => {
   const resolvedLogo = getPublicAssetUrl(logo) || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1920&q=80";
+  const partnerNames = partners
+    .map((partner) => partner.name?.trim())
+    .filter((name): name is string => Boolean(name));
 
   return (
-    <section className="relative overflow-hidden bg-[#f7faf5] py-24 text-slate-900 lg:py-32">
-      <div className="absolute inset-0 z-0 opacity-0 sm:opacity-100">
-        <img
-          src={resolvedLogo}
-          alt={eventName}
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#f7faf5a9] via-[#f7faf5]/90 to-[#f7faf5]/70" />
+    <section className="relative overflow-hidden bg-[#f2f6ef] pt-20 pb-28 text-slate-900 lg:pt-28 lg:pb-36">
+      <div className="absolute inset-0 z-0 opacity-100">
+        <div className="h-full w-full scale-105 overflow-hidden blur-[2px] grayscale-[0.15]">
+          <img
+            src={resolvedLogo}
+            alt={eventName}
+            className="h-full w-full object-cover"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#f7faf5]/45 via-[#f7faf5]/80 to-[#f7faf5]/75" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -89,6 +100,28 @@ export const Hero: React.FC<HeroProps> = ({
               View Programme
             </Link>
           </div>
+        </div>
+      </div>
+
+      {/* Partner names anchored to the bottom-center */}
+      <div className="absolute bottom-6 inset-x-0 z-10 flex justify-center px-4">
+        <div className="inline-flex flex-wrap items-center justify-center gap-3 rounded-full px-5 py-2 text-center text-xs font-medium tracking-wide text-black shadow-sm backdrop-blur-sm">
+          {partnerNames.length > 0 ? (
+            partnerNames.slice(0, 3).map((name, index) => (
+              <React.Fragment key={name}>
+                <span>{name.toUpperCase()}</span>
+                {index < partnerNames.slice(0, 3).length - 1 && <span className="text-slate-400">•</span>}
+              </React.Fragment>
+            ))
+          ) : (
+            <>
+              <span>RAK CERAMICS</span>
+              <span className="text-slate-400">•</span>
+              <span>ADPOINT</span>
+              <span className="text-slate-400">•</span>
+              <span>MANAGER-OSX</span>
+            </>
+          )}
         </div>
       </div>
     </section>

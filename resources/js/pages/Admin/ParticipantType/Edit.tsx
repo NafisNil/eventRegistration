@@ -2,34 +2,31 @@ import { Head, Link, router } from '@inertiajs/react';
 import React from 'react';
 import Swal from 'sweetalert2';
 import AdminLayout from '@/layouts/AdminLayout';
-import GuestForm from './Form';
+import ParticipantTypeForm from './Form';
 
-interface Guest {
+interface ParticipantType {
   id: number;
-  name: string;
-  designation: string;
-  description?: string | null;
-  logo?: string | null;
-  expertise?: string | null;
-  type?: string | null;
+  name?: string | null;
 }
+
+
 
 interface EditProps {
-  guest: Guest;
+  participantType: ParticipantType;
 }
 
-export default function Edit({ guest }: EditProps) {
+export default function Edit({ participantType }: EditProps) {
   const handleSubmit = (formData: FormData) => {
     formData.append('_method', 'PUT');
 
-    router.post(`/guests/${guest.id}`, formData, {
+    router.post(`/participant-types/${participantType.id}`, formData, {
       forceFormData: true,
       preserveScroll: true,
       onSuccess: () => {
         Swal.fire({
           icon: 'success',
-          title: 'Guest updated',
-          text: 'The guest was updated successfully.',
+          title: 'Participant Type updated',
+          text: 'The participant type was updated successfully.',
           timer: 2000,
           showConfirmButton: false,
         });
@@ -46,27 +43,23 @@ export default function Edit({ guest }: EditProps) {
 
   return (
     <>
-      <Head title="Edit Guest" />
+      <Head title="Edit Participant Type" />
 
       <div className="space-y-4">
         <div className="rounded-2xl bg-linear-to-r from-emerald-900 via-emerald-800 to-teal-900 p-6 text-white shadow-sm">
           <p className="text-xs uppercase tracking-[0.2em] text-emerald-200">Media & Branding</p>
-          <h1 className="mt-2 text-2xl font-bold">Edit Guest</h1>
-          <Link href="/guests" className="text-sm text-emerald-200 hover:underline">
+          <h1 className="mt-2 text-2xl font-bold">Edit Participant Type</h1>
+          <Link href="/participant-types" className="text-sm text-emerald-200 hover:underline">
             Back to list
           </Link>
         </div>
 
-        <GuestForm
+        <ParticipantTypeForm
           initialData={{
-            name: guest.name,
-            designation: guest.designation,
-            description: guest.description ?? '',
-            logo: guest.logo ?? null,
-            expertise: guest.expertise ?? '',
-            type: guest.type ?? '',
+            name: participantType.name ?? '',
+
           }}
-          submitLabel="Update Guest"
+          submitLabel="Update Participant Type"
           onSubmit={handleSubmit}
         />
       </div>
@@ -75,5 +68,5 @@ export default function Edit({ guest }: EditProps) {
 }
 
 Edit.layout = (page: React.ReactNode) => (
-  <AdminLayout currentRoute="guests.index">{page}</AdminLayout>
+  <AdminLayout currentRoute="participant-types.index">{page}</AdminLayout>
 );

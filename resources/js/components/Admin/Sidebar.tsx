@@ -24,6 +24,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen, currentRout
     { label: 'Social Media', route: 'social-media.index', icon: '🌐', href: '/social-media' },
     { label: 'Contact Messages', route: 'contact.messages', icon: '✉️', href: '/contact-messages' },
     { label: 'User Registrations', route: 'user-registrations.index', icon: '📝', href: '/user-registrations' },
+    { label: 'Participant Types', route: 'participant-types.index', icon: '👥', href: '/participant-types' },
   ];
 
   return (

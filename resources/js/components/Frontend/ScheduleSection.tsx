@@ -44,7 +44,7 @@ export const ScheduleSection: React.FC<ScheduleSectionProps> = ({ schedules = []
             <h2 className="text-3xl font-bold text-white mt-2">A single, focused day</h2>
             <p className="text-slate-400 text-sm mt-1">14 November 2026 · 09:00 AM – 05:30 PM</p>
           </div>
-          <Link href="/schedule" className="mt-4 md:mt-0 inline-flex items-center gap-2 text-sm font-medium text-emerald-400 hover:text-emerald-300">
+          <Link href="/schedule_list" className="mt-4 md:mt-0 inline-flex items-center gap-2 text-sm font-medium text-emerald-400 hover:text-emerald-300">
             Full schedule <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

@@ -19,6 +19,8 @@ interface EventStatRecord {
   time?: string | null;
   registration_deadline?: string | null;
     organizer?: string | null;
+    venue?: string | null;
+
 }
 
 interface LocationRecord {
@@ -37,11 +39,19 @@ interface PartnerRecord {
   } | null;
 }
 
+interface SocialMediaRecord {
+  facebook?: string | null;
+  linkedin?: string | null;
+  youtube?: string | null;
+  twitter?: string | null;
+}
+
 interface AboutPageProps {
   about?: AboutRecord | null;
   eventStat?: EventStatRecord | null;
   location?: LocationRecord | null;
   partners?: PartnerRecord[];
+  socialMedia?: SocialMediaRecord | null;
 }
 
 const getPublicAssetUrl = (value?: string | null) => {
@@ -52,7 +62,7 @@ const getPublicAssetUrl = (value?: string | null) => {
   return `/storage/${value.replace(/^\/+/, "")}`;
 };
 
-export default function AboutPage({ about, eventStat, location, partners = [] }: AboutPageProps) {
+export default function AboutPage({ about, eventStat, location, partners = [], socialMedia }: AboutPageProps) {
   const eventName = eventStat?.event_name || "National Innovation & Digital Governance Summit 2026";
   const description = about?.description || "The National Innovation & Digital Governance Summit 2026 is an official convening designed to accelerate the adoption of responsible digital technology across public institutions. Across keynote addresses, expert panels and hands-on workshops, participants will examine how data, artificial intelligence and citizen-centred design can improve the delivery of essential services.";
   const reasonToAttend = about?.reason_to_attend || "Public institutions are digitising rapidly, but progress remains uneven across sectors and regions. This summit was established to create a shared national forum where practitioners can exchange evidence, align on standards and build lasting partnerships.";
@@ -93,8 +103,8 @@ export default function AboutPage({ about, eventStat, location, partners = [] }:
       })
     : "1 November 2026";
 
-  const formattedAddress = location?.address || "Hall A, Grand National Convention Centre, 12 Republic Avenue, Dhaka 1207";
-  const formattedVenue = eventStat?.location || "Grand National Convention Centre";
+  const formattedAddress = eventStat?.location || "Hall A, Grand National Convention Centre, 12 Republic Avenue, Dhaka 1207";
+  const formattedVenue = eventStat?.venue || "Grand National Convention Centre";
 
   return (
     <>
@@ -193,10 +203,6 @@ export default function AboutPage({ about, eventStat, location, partners = [] }:
                     <dd className="mt-2 text-base font-medium text-slate-900">{formattedDeadline}</dd>
                   </div>
 
-                  <div>
-                    <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">Organiser</dt>
-                    <dd className="mt-2 text-base font-medium text-slate-900">Secretariat, National Innovation & Digital Governance Summit</dd>
-                  </div>
                 </dl>
 
                 <Link

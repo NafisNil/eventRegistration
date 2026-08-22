@@ -19,6 +19,7 @@ use App\Models\UserRegistration;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Models\ParticipantType;
 use Manoar\QrCode\Facades\QrCode;
 
 use Inertia\Inertia;
@@ -36,6 +37,7 @@ class FrontendController extends Controller
             'schedules' => Schedule::latest()->get(),
             'partners' => Partner::with('partnershipCategory')->latest()->get(),
             'location' => Location::latest()->first(),
+            'socialMedia' => SocialMedia::latest()->first(),
         ]);
     }
 
@@ -45,6 +47,8 @@ class FrontendController extends Controller
             'about' => About::latest()->first(),
             'eventStat' => EventStat::latest()->first(),
             'partners' => Partner::with('partnershipCategory')->latest()->get(),
+            'location' => Location::latest()->first(),
+            'socialMedia' => SocialMedia::latest()->first(),
         ]);
     }
 
@@ -56,6 +60,7 @@ class FrontendController extends Controller
             'eventStat' => EventStat::latest()->first(),
             'about' => About::latest()->first(),
             'location' => Location::latest()->first(),
+            'socialMedia' => SocialMedia::latest()->first(),
         ]);
     }
 
@@ -66,6 +71,7 @@ class FrontendController extends Controller
             'eventStat' => EventStat::latest()->first(),
             'about' => About::latest()->first(),
             'location' => Location::latest()->first(),
+            'socialMedia' => SocialMedia::latest()->first(),
         ]);
     }   
 
@@ -76,6 +82,8 @@ class FrontendController extends Controller
             'eventStat' => EventStat::latest()->first(),
             'about' => About::latest()->first(),
             'location' => Location::latest()->first(),
+            'socialMedia' => SocialMedia::latest()->first(),
+            
         ]);
     }
 
@@ -110,6 +118,8 @@ class FrontendController extends Controller
             'eventStat' => EventStat::latest()->first(),
             'about' => About::latest()->first(),
             'location' => Location::latest()->first(),
+            'socialMedia' => SocialMedia::latest()->first(),
+            'participantTypes' => ParticipantType::latest()->get(),
         ]);
     }
 
@@ -127,6 +137,7 @@ class FrontendController extends Controller
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'other_info' => 'nullable|string',
             'unique_code' => 'nullable|string|max:255',
+            'participation_type_id' => 'nullable|exists:participant_types,id',
         ]);
 
         $registrationData = $validatedData;

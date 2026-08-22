@@ -2,6 +2,7 @@ import { Head, Link } from '@inertiajs/react';
 import React from 'react';
 import AdminLayout from '@/layouts/AdminLayout';
 
+
 interface Registration {
   id: number;
   name: string;
@@ -15,6 +16,11 @@ interface Registration {
   other_info?: string | null;
   logo?: string | null;
   unique_code?: string | null;
+  participation_type_id?: number | string | null;
+  participant_type?: {
+    id: number;
+    name: string;
+  } | null;
   created_at?: string | null;
 }
 
@@ -65,6 +71,16 @@ export default function Show({ registration }: ShowProps) {
               <InfoBlock label="Designation" value={registration.designation} />
               <InfoBlock label="District" value={registration.district} />
               <InfoBlock label="Unique Code" value={registration.unique_code} />
+              <InfoBlock
+                label="Participation Type"
+                value={
+                  registration.participant_type?.name
+                    ? registration.participant_type.name
+                    : registration.participation_type_id
+                      ? String(registration.participation_type_id)
+                      : '—'
+                }
+              />
             </div>
 
             <div>

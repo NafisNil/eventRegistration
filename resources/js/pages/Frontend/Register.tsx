@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import Swal from 'sweetalert2';
 import {
@@ -29,28 +29,107 @@ interface LocationRecord {
   phone?: string | null;
 }
 
+interface SocialMediaRecord {
+  facebook?: string | null;
+  linkedin?: string | null;
+  youtube?: string | null;
+  twitter?: string | null;
+}
+
+interface ParticipantTypeOption {
+  id?: number | string | null;
+  name?: string | null;
+}
+
 interface RegisterProps {
   eventStat?: EventStatRecord | null;
   about?: AboutRecord | null;
   location?: LocationRecord | null;
+  socialMedia?: SocialMediaRecord | null;
+  participantTypes?: ParticipantTypeOption[];
 }
 
-export default function RegisterPage({ eventStat, about, location }: RegisterProps) {
+const districtOptions = Array.from(new Set([
+  'Dhaka',
+  'Chattogram',
+  'Rajshahi',
+  'Khulna',
+  'Barishal',
+  'Sylhet',
+  'Rangpur',
+  'Mymensingh',
+  'Cumilla',
+  'Faridpur',
+  'Gazipur',
+  'Narayanganj',
+  'Jessore',
+  'Bogura',
+  'Dinajpur',
+  'Noakhali',
+  'Tangail',
+  'Pabna',
+  'Kushtia',
+  'Brahmanbaria',
+  'Jhalokathi',
+  'Sherpur',
+  'Sunamganj',
+  'Habiganj',
+  'Sirajganj',
+  'Lalmonirhat',
+  'Thakurgaon',
+  'Panchagarh',
+  'Naogaon',
+  'Natore',
+  'Joypurhat',
+  'Meherpur',
+  'Chuadanga',
+  'Magura',
+  'Jhenaidah',
+  'Satkhira',
+  'Bagerhat',
+  'Kurigram',
+  'Gaibandha',
+  'Madaripur',
+  'Shariatpur',
+  'Bhola',
+  'Jhalokati',
+  'Pirojpur',
+  'Barguna',
+  'Feni',
+  'Lakshmipur',
+  'Cox\'s Bazar',
+  'Bandarban',
+  'Rangamati',
+  'Khagrachhari',
+  'Other',
+]));
+
+export default function RegisterPage({ eventStat, about, location, socialMedia, participantTypes = [] }: RegisterProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [districtSearch, setDistrictSearch] = useState('');
+  const [isDistrictOpen, setIsDistrictOpen] = useState(false);
 
   const [form, setForm] = useState({
     name: '',
     email: '',
     phone: '',
     gender: '',
-    participant_type: '',
     organization: '',
     designation: '',
     district: '',
     address: '',
     other_info: '',
     logo: null as File | null,
+    participation_type_id: '',
   });
+
+  const filteredDistrictOptions = districtOptions.filter((district) =>
+    district.toLowerCase().includes(districtSearch.toLowerCase())
+  );
+
+  useEffect(() => {
+    setDistrictSearch(form.district || '');
+  }, [form.district]);
 
   const eventName = eventStat?.event_name || 'National Innovation & Digital Governance Summit 2026';
   const footerDescription = about?.description || 'A one-day national summit bringing together policymakers, technologists, academics and civil society to shape the next decade of digital public infrastructure.';
@@ -79,7 +158,7 @@ export default function RegisterPage({ eventStat, about, location }: RegisterPro
       email: form.email,
       phone: form.phone,
       gender: form.gender,
-      participant_type: form.participant_type,
+      participation_type_id: form.participation_type_id,
       organization: form.organization,
       designation: form.designation,
       district: form.district,
@@ -115,13 +194,13 @@ export default function RegisterPage({ eventStat, about, location }: RegisterPro
           email: '',
           phone: '',
           gender: '',
-          participant_type: '',
           organization: '',
           designation: '',
           district: '',
           address: '',
           other_info: '',
           logo: null,
+          participation_type_id: '',
         });
       },
       onError: (errors) => {
@@ -219,15 +298,24 @@ export default function RegisterPage({ eventStat, about, location }: RegisterPro
                 <div className="grid gap-4 md:grid-cols-2">
                   <label className="block text-sm font-medium text-slate-700">
                     <span className="mb-2 block">
-                      Organisation / Institution <span className="text-red-500">*</span>
+                      Participant type <span className="text-red-500">*</span>
                     </span>
-                    <input
-                      type="text"
-                      value={form.organization}
-                      onChange={(event) => setForm({ ...form, organization: event.target.value })}
-                      className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-base text-slate-800 outline-none transition focus:border-slate-400"
-                      required
-                    />
+                    <div className="relative">
+                      <select
+                        value={form.participation_type_id}
+                        onChange={(event) => setForm({ ...form, participation_type_id: event.target.value })}
+                        className="w-full appearance-none rounded-xl border border-slate-300 bg-white px-3 py-2.5 pr-10 text-base text-slate-800 outline-none transition focus:border-slate-400"
+                        required
+                      >
+                        <option value="">Select</option>
+                        {participantTypes.map((type) => (
+                          <option key={type.id ?? type.name} value={String(type.id ?? '')}>
+                            {type.name || 'Unnamed type'}
+                          </option>
+                        ))}
+                      </select>
+                      <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-500">⌄</span>
+                    </div>
                   </label>
 
                   <label className="block text-sm font-medium text-slate-700">
@@ -249,16 +337,67 @@ export default function RegisterPage({ eventStat, about, location }: RegisterPro
                     <span className="mb-2 block">
                       District / City <span className="text-red-500">*</span>
                     </span>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={districtSearch}
+                        onFocus={() => setIsDistrictOpen(true)}
+                        onChange={(event) => {
+                          const value = event.target.value;
+                          setDistrictSearch(value);
+                          setIsDistrictOpen(true);
+                          setForm((currentForm) => ({ ...currentForm, district: value }));
+                        }}
+                        placeholder="Search district"
+                        className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 pr-10 text-base text-slate-800 outline-none transition focus:border-slate-400"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setIsDistrictOpen((open) => !open)}
+                        className="absolute inset-y-0 right-3 flex items-center text-slate-500"
+                        aria-label="Toggle district options"
+                      >
+                        ⌄
+                      </button>
+
+                      {isDistrictOpen && (
+                        <div className="absolute z-20 mt-2 max-h-56 w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-1 shadow-lg">
+                          {filteredDistrictOptions.length > 0 ? (
+                            filteredDistrictOptions.map((district) => (
+                              <button
+                                key={district}
+                                type="button"
+                                onClick={() => {
+                                  setForm((currentForm) => ({ ...currentForm, district }));
+                                  setDistrictSearch(district);
+                                  setIsDistrictOpen(false);
+                                }}
+                                className="flex w-full items-center rounded-lg px-3 py-2 text-left text-sm text-slate-700 transition hover:bg-slate-100"
+                              >
+                                {district}
+                              </button>
+                            ))
+                          ) : (
+                            <div className="px-3 py-2 text-sm text-slate-500">No district found</div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </label>
+
+                  <label className="block text-sm font-medium text-slate-700">
+                    <span className="mb-2 block">
+                      Organisation / Institution/Company <span className="text-red-500">*</span>
+                    </span>
                     <input
                       type="text"
-                      value={form.district}
-                      onChange={(event) => setForm({ ...form, district: event.target.value })}
+                      value={form.organization}
+                      onChange={(event) => setForm({ ...form, organization: event.target.value })}
                       className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-base text-slate-800 outline-none transition focus:border-slate-400"
                       required
                     />
                   </label>
-
-               
                 </div>
 
                 <label className="block text-sm font-medium text-slate-700">
@@ -356,7 +495,7 @@ export default function RegisterPage({ eventStat, about, location }: RegisterPro
         </div>
       </main>
 
-      <Footer eventName={eventName} description={footerDescription} email={footerEmail} />
+      <Footer eventName={eventName} description={footerDescription} email={footerEmail} socialMedia={socialMedia} />
     </div>
   );
 }

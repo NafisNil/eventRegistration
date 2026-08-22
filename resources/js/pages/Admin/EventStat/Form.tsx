@@ -18,6 +18,7 @@ interface EventStatFormProps {
     registration_deadline?: string;
     target_participants?: string | null;
     organizer?: string | null;
+    venue?: string | null;
   };
   submitLabel?: string;
   processing?: boolean;
@@ -37,6 +38,7 @@ export default function EventStatForm({
   const [registrationDeadline, setRegistrationDeadline] = useState(initialData?.registration_deadline ?? '');
   const [targetParticipants, setTargetParticipants] = useState(initialData?.target_participants ?? '');
   const [organizer, setOrganizer] = useState(initialData?.organizer ?? '');
+  const [venue, setVenue] = useState(initialData?.venue ?? '');
 
   const editor = useEditor({
     extensions: [StarterKit, TextStyle, Color, FontSize],
@@ -77,6 +79,7 @@ export default function EventStatForm({
     formData.append('time', time);
     formData.append('registration_deadline', registrationDeadline);
     formData.append('organizer', organizer);
+    formData.append('venue', venue);
 
     if (targetParticipants.trim()) {
       formData.append('target_participants', targetParticipants);
@@ -207,6 +210,20 @@ export default function EventStatForm({
         </div>
 
         <div className="space-y-2">
+          <Label htmlFor="venue" className="block text-sm font-medium text-slate-700">
+            Venue
+          </Label>
+          <Input
+            id="venue"
+            name="venue"
+            type="text"
+            value={venue}
+            onChange={(event) => setVenue(event.target.value)}
+            className="border-emerald-200 text-black focus-visible:ring-emerald-200"
+          />
+        </div>
+
+        <div className="space-y-2">
           <Label htmlFor="event_date" className="block text-sm font-medium text-slate-700">
             Event date
           </Label>
@@ -229,7 +246,8 @@ export default function EventStatForm({
           <Input
             id="time"
             name="time"
-            type="time"
+            type="text"
+            placeholder="e.g. 10:00 AM - 4:00 PM"
             value={time}
             onChange={(event) => setTime(event.target.value)}
             className="border-emerald-200 text-black focus-visible:ring-emerald-200"

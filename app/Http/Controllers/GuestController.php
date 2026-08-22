@@ -76,6 +76,7 @@ class GuestController extends Controller
 
             'description' => 'nullable|string',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'type' => 'nullable|string|max:255',
         ]);
 
         $guest = Guest::create([
@@ -84,6 +85,7 @@ class GuestController extends Controller
             'description' => $validatedData['description'] ?? null,
             'logo' => $this->uploadLogo($request),
             'expertise' => $request->input('expertise', null),
+            'type' => $request->input('type', null),
         ]);
 
         return redirect()->route('guests.index')->with('success', 'Guest created successfully.');
@@ -121,7 +123,10 @@ class GuestController extends Controller
             'designation' => 'required|string|max:255',
             'description' => 'nullable|string',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'type' => 'nullable|string|max:255',
         ]);
+
+
 
         $guest->update([
             'name' => $validatedData['name'],
@@ -129,6 +134,7 @@ class GuestController extends Controller
             'description' => $validatedData['description'] ?? null,
             'logo' => $this->uploadLogo($request) ?? $guest->logo,
             'expertise' => $request->input('expertise', $guest->expertise),
+            'type' => $request->input('type', $guest->type),
         ]);
 
         return redirect()->route('guests.index')->with('success', 'Guest updated successfully.');

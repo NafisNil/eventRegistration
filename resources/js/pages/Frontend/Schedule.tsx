@@ -24,14 +24,22 @@ interface LocationRecord {
   email?: string | null;
 }
 
+interface SocialMediaRecord {
+  facebook?: string | null;
+  linkedin?: string | null;
+  youtube?: string | null;
+  twitter?: string | null;
+}
+
 interface ScheduleProps {
   schedules?: ScheduleItem[];
   eventStat?: EventStatRecord | null;
   about?: AboutRecord | null;
   location?: LocationRecord | null;
+  socialMedia?: SocialMediaRecord | null;
 }
 
-export default function SchedulePage({ schedules = [], eventStat, about, location }: ScheduleProps) {
+export default function SchedulePage({ schedules = [], eventStat, about, location, socialMedia }: ScheduleProps) {
   const [selectedBadge, setSelectedBadge] = useState<string>("All");
 
   const eventName = eventStat?.event_name || "National Innovation & Digital Governance Summit 2026";
@@ -117,7 +125,7 @@ export default function SchedulePage({ schedules = [], eventStat, about, locatio
         </div>
       </main>
 
-      <Footer eventName={eventName} description={footerDescription} email={footerEmail} />
+      <Footer eventName={eventName} description={footerDescription} email={footerEmail} socialMedia={socialMedia} />
     </div>
   );
 }

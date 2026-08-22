@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import AdminLayout from '@/layouts/AdminLayout';
 
 interface Registration {
@@ -10,6 +10,7 @@ interface Registration {
   organization?: string | null;
   unique_code?: string | null;
   logo?: string | null;
+  
 }
 
 interface IndexProps {
@@ -17,6 +18,23 @@ interface IndexProps {
 }
 
 export default function Index({ registrations = [] }: IndexProps) {
+  const [search, setSearch] = useState('');
+
+  const filteredRegistrations = useMemo(() => {
+    const keyword = search.trim().toLowerCase();
+
+    if (!keyword) {
+      return registrations;
+    }
+
+    return registrations.filter((registration) => {
+      const name = registration.name?.toLowerCase() ?? '';
+      const uniqueCode = registration.unique_code?.toLowerCase() ?? '';
+
+      return name.includes(keyword) || uniqueCode.includes(keyword);
+    });
+  }, [registrations, search]);
+
   return (
     <>
       <Head title="User Registrations" />
@@ -31,9 +49,24 @@ export default function Index({ registrations = [] }: IndexProps) {
           </div>
         </div>
 
+        <div className="rounded-2xl border border-emerald-200 bg-white p-4 shadow-sm">
+          <label className="block text-sm font-medium text-slate-700">
+            <span className="mb-2 block">Search by name or unique code</span>
+            <input
+              type="text"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Type name or code..."
+              className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-base text-slate-800 outline-none transition focus:border-slate-400"
+            />
+          </label>
+        </div>
+
         <div className="overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
-          {registrations.length === 0 ? (
-            <div className="p-8 text-center text-slate-500">No registrations found yet.</div>
+          {filteredRegistrations.length === 0 ? (
+            <div className="p-8 text-center text-slate-500">
+              {search ? 'No matching registrations found.' : 'No registrations found yet.'}
+            </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-emerald-200 text-left text-sm text-slate-700">
@@ -49,7 +82,7 @@ export default function Index({ registrations = [] }: IndexProps) {
                 </thead>
 
                 <tbody className="divide-y divide-emerald-100">
-                  {registrations.map((registration) => (
+                  {filteredRegistrations.map((registration) => (
                     <tr key={registration.id} className="align-middle">
                       <td className="px-4 py-4 font-medium text-slate-800">
                         <Link href={`/user-registrations/${registration.id}`} className="text-emerald-700 hover:underline">

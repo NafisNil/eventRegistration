@@ -17,6 +17,7 @@ interface GuestFormProps {
     description?: string;
     logo?: string | null;
     expertise?: string | null;
+    type?: string | null;
   };
   submitLabel?: string;
   processing?: boolean;
@@ -39,6 +40,7 @@ export default function GuestForm({
   const [expertise, setExpertise] = useState(initialData?.expertise ?? '');
   const [logo, setLogo] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(initialData?.logo ?? null);
+  const [type, setType] = useState(initialData?.type ?? '');
 
   const descriptionEditor = useEditor({
     extensions: [StarterKit, TextStyle, Color, FontSize],
@@ -199,6 +201,10 @@ export default function GuestForm({
       formData.append('expertise', expertise.trim());
     }
 
+    if (type.trim()) {
+      formData.append('type', type.trim());
+    }
+
     if (logo) {
       formData.append('logo', logo);
     }
@@ -257,6 +263,20 @@ export default function GuestForm({
             onChange={(event) => setExpertise(event.target.value)}
             placeholder="Guest expertise"
             className="border-emerald-200 text-black focus-visible:ring-emerald-200 block w-full rounded-lg border bg-emerald-50/40 p-3 text-sm text-slate-800 outline-none transition focus:outline-none focus:ring-2"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="type" className="block text-sm font-medium text-slate-700">
+            Type
+          </Label>
+          <Input
+            id="type"
+            name="type"
+            value={type}
+            onChange={(event) => setType(event.target.value)}
+            placeholder="Guest type"
+            className="border-emerald-200 text-black focus-visible:ring-emerald-200"
           />
         </div>
 

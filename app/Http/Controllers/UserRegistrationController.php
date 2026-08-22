@@ -46,9 +46,10 @@ class UserRegistrationController extends Controller
      */
     public function show(UserRegistration $userRegistration)
     {
-        //
+        $registration = UserRegistration::with('participantType')->findOrFail($userRegistration->id);
+
         return Inertia::render('Admin/UserRegistration/Show', [
-            'registration' => $userRegistration,
+            'registration' => $registration,
         ]);
     }
 

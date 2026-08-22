@@ -41,6 +41,7 @@ class EventStatController extends Controller
             'event_date' => 'required|date',
             'time' => 'required|string',
             'registration_deadline' => 'required|date',
+            'venue' => 'required|string',
             
         ]);
 
@@ -78,6 +79,7 @@ class EventStatController extends Controller
             'event_date' => 'required|date',
             'time' => 'required|string',
             'registration_deadline' => 'required|date',
+            'venue' => 'required|string',
         ]);
         $eventStat->update($request->all());
         return redirect()->route('event-stats.index')->with('success', 'Event Stat updated successfully.');

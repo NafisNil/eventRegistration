@@ -15,6 +15,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\UserRegistrationController;
+use App\Http\Controllers\ParticipantTypeController;
 
 // Route::inertia('/', 'welcome')->name('home');
 
@@ -52,6 +53,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
    Route::resource('social-media', SocialMediaController::class);
    Route::get('contact-messages', [AdminController::class, 'contactMessages'])->name('contact.messages');
    Route::resource('user-registrations', UserRegistrationController::class)->only(['index', 'show']);
+   Route::resource('participant-types', ParticipantTypeController::class)->except(['show']);
 });
 
 require __DIR__.'/settings.php';

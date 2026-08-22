@@ -1,9 +1,20 @@
 import React from "react";
 import { Link } from "@inertiajs/react";
-import { Calendar, MapPin, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
+interface CTASectionProps {
+  registrationDeadline?: string | null;
+}
 
-export const CTASection: React.FC = () => {
+export const CTASection: React.FC<CTASectionProps> = ({ registrationDeadline }) => {
+  const formattedDeadline = registrationDeadline
+    ? new Date(registrationDeadline).toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    : "1 November 2026";
+
   return (
     <section className="relative border-t border-emerald-100 bg-emerald-50 py-20 text-slate-900">
       <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
@@ -12,7 +23,7 @@ export const CTASection: React.FC = () => {
           Seats are limited and allocated on a first-come, confirmed basis
         </h2>
         <p className="mx-auto mb-8 max-w-2xl text-base text-slate-600">
-          Registration closes on 1 November 2026. Complete the form in under three minutes and receive your registration ID instantly.
+          Registration closes on {formattedDeadline}. Complete the form in under three minutes and receive your registration ID instantly.
         </p>
         <Link
           href="/user_register"

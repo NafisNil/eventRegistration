@@ -39,10 +39,10 @@ export const HighlightsSection: React.FC<HighlightsSectionProps> = ({ highlights
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-2xl text-center">
           <span className="text-xs font-semibold uppercase tracking-wider text-emerald-700">Programme highlights</span>
-          <h2 className="mt-2 text-3xl font-bold text-slate-900">What happens on the day</h2>
+          <h2 className="mt-2 text-3xl font-bold text-slate-900">Key Discussion Topics</h2>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 md:gap-8 md:grid-cols-2 lg:grid-cols-3">
           {items.map((item, idx) => {
             const Icon = fallbackIcons[idx % fallbackIcons.length];
             const resolvedLogo = getPublicAssetUrl(item.logo);

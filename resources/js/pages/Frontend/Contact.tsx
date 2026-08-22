@@ -209,7 +209,7 @@ export default function ContactPage({ eventStat, about, location, socialMedia }:
         </div>
       </main>
 
-      <Footer eventName={eventName} description={footerDescription} email={footerEmail} />
+      <Footer eventName={eventName} description={footerDescription} email={footerEmail} socialMedia={socialMedia} />
     </div>
   );
 }
