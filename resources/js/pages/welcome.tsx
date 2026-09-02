@@ -140,7 +140,7 @@ export default function Welcome({ hero, eventStat, about, guests = [], programHi
           />
           <FeaturedSpeakers guests={guests} />
           <HighlightsSection highlights={programHighlights} />
-          <ScheduleSection schedules={schedules} />
+          <ScheduleSection schedules={schedules} eventDate={formattedDate} eventTime={eventTime} />
           <OrganizersSection partners={partners} />
           <CTASection registrationDeadline={registrationDeadline} />
         </main>

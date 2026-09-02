@@ -13,7 +13,7 @@ import { Footer } from '@/components/Frontend/Footer';
 interface EventStatRecord {
   event_name?: string | null;
   event_date?: string | null;
-  start_time?: string | null;
+  time?: string | null;
   end_time?: string | null;
   venue?: string | null;
   registration_deadline?: string | null;
@@ -136,7 +136,7 @@ export default function RegisterPage({ eventStat, about, location, socialMedia, 
   const footerEmail = location?.email || 'secretariat@digitalsummit.gov.bd';
 
   const eventDate = eventStat?.event_date || '14 November 2026';
-  const startTime = eventStat?.start_time || '09:00 AM';
+  const time = eventStat?.time || '09:00 AM';
   const endTime = eventStat?.end_time || '05:30 PM';
   const eventVenue = location?.address || 'Hall A, Grand National Convention Centre, 12 Republic Avenue, Dhaka 1207';
   const registrationDeadline = eventStat?.registration_deadline
@@ -458,7 +458,7 @@ export default function RegisterPage({ eventStat, about, location, socialMedia, 
               <div className="mt-6 space-y-4 text-slate-700">
                 <div className="flex items-start gap-3 text-[0.9rem]">
                   <CalendarDays className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
-                  <span>{eventDate}<br />{startTime} - {endTime}</span>
+                  <span>{eventDate}<br />{time} </span>
                 </div>
 
                 <div className="flex items-start gap-3 text-[0.9rem]">

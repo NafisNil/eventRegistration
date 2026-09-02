@@ -8,6 +8,7 @@ interface Partner {
   name: string;
   partnership_category_id: number;
   logo?: string | null;
+  featured?: boolean | number | null;
   partnership_category?: {
     id: number;
     name: string;
@@ -48,6 +49,27 @@ export default function Index({ partners = [] }: IndexProps) {
     });
   };
 
+  const handleFeaturedToggle = (id: number) => {
+    router.post(`/partners/${id}/toggle-featured`, {}, {
+      preserveScroll: true,
+      onSuccess: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Featured status updated',
+          timer: 1200,
+          showConfirmButton: false,
+        });
+      },
+      onError: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Unable to update featured status',
+          text: 'Please try again.',
+        });
+      },
+    });
+  };
+
   return (
     <>
       <Head title="Partners" />
@@ -78,6 +100,7 @@ export default function Index({ partners = [] }: IndexProps) {
                     <th className="px-4 py-3 font-semibold">Name</th>
                     <th className="px-4 py-3 font-semibold">Category</th>
                     <th className="px-4 py-3 font-semibold">Logo</th>
+                    <th className="px-4 py-3 font-semibold">Featured</th>
                     <th className="px-4 py-3 text-right font-semibold">Actions</th>
                   </tr>
                 </thead>
@@ -99,6 +122,20 @@ export default function Index({ partners = [] }: IndexProps) {
                         ) : (
                           '—'
                         )}
+                      </td>
+
+                      <td className="px-4 py-4">
+                        <label className="inline-flex cursor-pointer items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(partner.featured)}
+                            onChange={() => handleFeaturedToggle(partner.id)}
+                            className="h-4 w-4 rounded border-emerald-300 text-emerald-600 focus:ring-emerald-500"
+                          />
+                          <span className="text-xs font-medium uppercase tracking-wide text-slate-600">
+                            {partner.featured ? 'Yes' : 'No'}
+                          </span>
+                        </label>
                       </td>
 
                       <td className="px-4 py-4 text-right">

@@ -4,6 +4,7 @@ import { Calendar, MapPin, ArrowRight } from "lucide-react";
 
 interface PartnerRecord {
   name?: string | null;
+  featured?: boolean | number | null;
 }
 
 interface HeroProps {
@@ -35,6 +36,7 @@ export const Hero: React.FC<HeroProps> = ({
 }) => {
   const resolvedLogo = getPublicAssetUrl(logo) || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1920&q=80";
   const partnerNames = partners
+    .filter((partner) => Boolean(partner.featured))
     .map((partner) => partner.name?.trim())
     .filter((name): name is string => Boolean(name));
 
@@ -107,10 +109,10 @@ export const Hero: React.FC<HeroProps> = ({
       <div className="absolute bottom-6 inset-x-0 z-10 flex justify-center px-4">
         <div className="inline-flex flex-wrap items-center justify-center gap-3 rounded-full px-5 py-2 text-center text-xs font-medium tracking-wide text-black shadow-sm backdrop-blur-sm">
           {partnerNames.length > 0 ? (
-            partnerNames.slice(0, 3).map((name, index) => (
-              <React.Fragment key={name}>
+            partnerNames.map((name, index) => (
+              <React.Fragment key={`${name}-${index}`}>
                 <span>{name.toUpperCase()}</span>
-                {index < partnerNames.slice(0, 3).length - 1 && <span className="text-slate-400">•</span>}
+                {index < partnerNames.length - 1 && <span className="text-slate-400">•</span>}
               </React.Fragment>
             ))
           ) : (

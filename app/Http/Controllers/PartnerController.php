@@ -80,11 +80,13 @@ class PartnerController extends Controller
 
             'logo' => 'nullable|image|max:2048', // Max size 2MB
             'partnership_category_id' => 'nullable|exists:partnership_categories,id',
+
         ]);
         $partner = Partner::create([
             'name' => $validated['name'],
             'logo' => $this->uploadLogo($request),
             'partnership_category_id' => $validated['partnership_category_id'] ?? null,
+
         ]);
         return redirect()->route('partners.index')->with('success', 'Partner created successfully.');
     }
@@ -143,5 +145,13 @@ class PartnerController extends Controller
         $this->deleteImage($partner->logo);
         $partner->delete();
         return redirect()->route('partners.index')->with('success', 'Partner deleted successfully.');
+    }
+
+    public function toggleFeatured(Partner $partner)
+    {
+        $partner->featured = !$partner->featured;
+        $partner->save();
+
+        return redirect()->route('partners.index')->with('success', 'Partner featured status updated successfully.');
     }
 }

@@ -19,7 +19,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen, currentRout
     { label: 'Schedule', route: 'schedules.index', icon: '📣', href: '/schedules' },
     { label: 'Partnership Category', route: 'partnership-categories.index', icon: '⚙️', href: '/partnership-categories' },
     { label: 'Partner', route: 'partners.index', icon: '🤝', href: '/partners' },
-    { label: 'Announcements', route: 'announcements.index', icon: '📢', href: '/announcements' },
+
     { label: 'Location', route: 'locations.index', icon: '📍', href: '/locations' },
     { label: 'Social Media', route: 'social-media.index', icon: '🌐', href: '/social-media' },
     { label: 'Contact Messages', route: 'contact.messages', icon: '✉️', href: '/contact-messages' },

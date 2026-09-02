@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(['name', 'partnership_category_id', 'logo'])]
+#[Fillable(['name', 'partnership_category_id', 'logo', 'featured'])]
 class Partner extends Model
 {
     //

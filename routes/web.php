@@ -54,6 +54,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
    Route::get('contact-messages', [AdminController::class, 'contactMessages'])->name('contact.messages');
    Route::resource('user-registrations', UserRegistrationController::class)->only(['index', 'show']);
    Route::resource('participant-types', ParticipantTypeController::class)->except(['show']);
+
+   //featured partners route
+   Route::post('partners/{partner}/toggle-featured', [PartnerController::class, 'toggleFeatured'])->name('partners.toggle-featured');
 });
 
 require __DIR__.'/settings.php';

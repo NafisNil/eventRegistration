@@ -14,10 +14,15 @@ interface ScheduleItem {
 
 interface ScheduleSectionProps {
   schedules?: ScheduleItem[];
+  eventDate?: string | null;
+  eventTime?: string | null;
 }
 
-export const ScheduleSection: React.FC<ScheduleSectionProps> = ({ schedules = [] }) => {
+export const ScheduleSection: React.FC<ScheduleSectionProps> = ({ schedules = [], eventDate, eventTime }) => {
   const [selectedBadge, setSelectedBadge] = useState<string>("All");
+
+  const scheduleDateLabel = eventDate || "14 November 2026";
+  const scheduleTimeLabel = eventTime || "09:00 AM – 05:30 PM";
 
   const filters = useMemo(() => {
     const values = schedules
@@ -42,7 +47,7 @@ export const ScheduleSection: React.FC<ScheduleSectionProps> = ({ schedules = []
           <div>
             <span className="text-xs font-semibold tracking-wider text-emerald-400 uppercase">Event schedule</span>
             <h2 className="text-3xl font-bold text-white mt-2">A single, focused day</h2>
-            <p className="text-slate-400 text-sm mt-1">14 November 2026 · 09:00 AM – 05:30 PM</p>
+            <p className="text-slate-400 text-sm mt-1">{scheduleDateLabel} · {scheduleTimeLabel}</p>
           </div>
           <Link href="/schedule_list" className="mt-4 md:mt-0 inline-flex items-center gap-2 text-sm font-medium text-emerald-400 hover:text-emerald-300">
             Full schedule <ArrowRight className="w-4 h-4" />

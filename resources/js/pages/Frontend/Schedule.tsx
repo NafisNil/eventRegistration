@@ -18,6 +18,8 @@ interface AboutRecord {
 
 interface EventStatRecord {
   event_name?: string | null;
+  event_date?: string | null;
+  time?: string | null;
 }
 
 interface LocationRecord {
@@ -45,6 +47,14 @@ export default function SchedulePage({ schedules = [], eventStat, about, locatio
   const eventName = eventStat?.event_name || "National Innovation & Digital Governance Summit 2026";
   const footerDescription = about?.description || "A one-day national summit bringing together policymakers, technologists, academics and civil society to shape the next decade of digital public infrastructure.";
   const footerEmail = location?.email || "secretariat@digitalsummit.gov.bd";
+  const formattedDate = eventStat?.event_date
+    ? new Date(eventStat.event_date).toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    : "14 November 2026";
+  const formattedTime = eventStat?.time || "09:00 AM – 05:30 PM";
 
   const filters = useMemo(() => {
     const values = schedules
@@ -70,7 +80,7 @@ export default function SchedulePage({ schedules = [], eventStat, about, locatio
         <div className="mb-10">
           <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">Event schedule</span>
           <h1 className="mt-3 text-3xl font-bold text-slate-900 md:text-4xl">A single, focused day</h1>
-          <p className="mt-2 text-sm text-slate-600 md:text-base">14 November 2026 · 09:00 AM – 05:30 PM</p>
+          <p className="mt-2 text-sm text-slate-600 md:text-base">{formattedDate} &nbsp;·&nbsp; {formattedTime}</p>
         </div>
 
         <div className="mb-8 flex flex-wrap gap-3">
