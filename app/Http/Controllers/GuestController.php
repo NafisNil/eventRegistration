@@ -58,7 +58,7 @@ class GuestController extends Controller
         Storage::disk('public')->makeDirectory('guest');
 
         $image = $this->imageManager()->decodePath($file->getRealPath());
-        $image->resize(600, 900);
+        $image->resize(548, 380);
         $image->scaleDown(1400)->save(Storage::disk('public')->path($fileName));
 
         return $fileName;

@@ -79,7 +79,7 @@ class ProgramHighlightController extends Controller
         Storage::disk('public')->makeDirectory('heroes');
 
         $image = $this->imageManager()->decodePath($file->getRealPath());
-        $image->resize(20, 20);
+        $image->resize(50, 50);
         
         $image->scaleDown(1400)->save(Storage::disk('public')->path($fileName));
 

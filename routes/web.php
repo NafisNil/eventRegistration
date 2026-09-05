@@ -16,6 +16,7 @@ use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\UserRegistrationController;
 use App\Http\Controllers\ParticipantTypeController;
+use App\Http\Controllers\LeadershipController;
 
 // Route::inertia('/', 'welcome')->name('home');
 
@@ -54,6 +55,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
    Route::get('contact-messages', [AdminController::class, 'contactMessages'])->name('contact.messages');
    Route::resource('user-registrations', UserRegistrationController::class)->only(['index', 'show']);
    Route::resource('participant-types', ParticipantTypeController::class)->except(['show']);
+   Route::resource('leaderships', LeadershipController::class);
 
    //featured partners route
    Route::post('partners/{partner}/toggle-featured', [PartnerController::class, 'toggleFeatured'])->name('partners.toggle-featured');

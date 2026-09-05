@@ -4,36 +4,27 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-interface PartnershipCategory {
-  id: number;
-  name: string;
-}
-
-interface PartnerFormProps {
+interface LeadershipFormProps {
   initialData?: {
     name?: string;
-    partnership_category_id?: number | null;
-    link?: string | null;
+    role?: string | null;
+    ministry?: string | null;
     logo?: string | null;
   };
-  categories?: PartnershipCategory[];
   submitLabel?: string;
   processing?: boolean;
   onSubmit: (payload: FormData) => void;
 }
 
-export default function PartnerForm({
+export default function LeadershipForm({
   initialData,
-  categories = [],
-  submitLabel = 'Save Partner',
+  submitLabel = 'Save Leadership',
   processing = false,
   onSubmit,
-}: PartnerFormProps) {
+}: LeadershipFormProps) {
   const [name, setName] = useState(initialData?.name ?? '');
-  const [partnershipCategoryId, setPartnershipCategoryId] = useState<number | ''>(
-    initialData?.partnership_category_id ?? '',
-  );
-  const [link, setLink] = useState(initialData?.link ?? '');
+  const [role, setRole] = useState(initialData?.role ?? '');
+  const [ministry, setMinistry] = useState(initialData?.ministry ?? '');
   const [logo, setLogo] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(initialData?.logo ?? null);
 
@@ -59,13 +50,8 @@ export default function PartnerForm({
 
     const formData = new FormData();
     formData.append('name', name.trim());
-    formData.append('partnership_category_id', String(partnershipCategoryId));
-
-    if (link.trim()) {
-      formData.append('link', link.trim());
-    } else {
-      formData.append('link', '');
-    }
+    formData.append('role', role.trim());
+    formData.append('ministry', ministry.trim());
 
     if (logo) {
       formData.append('logo', logo);
@@ -86,51 +72,44 @@ export default function PartnerForm({
             name="name"
             value={name}
             onChange={(event) => setName(event.target.value)}
-            placeholder="Partner name"
+            placeholder="Leadership name"
             required
             className="border-emerald-200 text-black focus-visible:ring-emerald-200"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="partnership_category_id" className="block text-sm font-medium text-slate-700">
-            Category
+          <Label htmlFor="role" className="block text-sm font-medium text-slate-700">
+            Role
           </Label>
-          <select
-            id="partnership_category_id"
-            name="partnership_category_id"
-            value={partnershipCategoryId}
-            onChange={(event) => setPartnershipCategoryId(event.target.value ? Number(event.target.value) : '')}
-            required
-            className="w-full rounded-xl border border-emerald-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:ring-2 focus:ring-emerald-200"
-          >
-            <option value="">Select a category</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
+          <Input
+            id="role"
+            name="role"
+            value={role}
+            onChange={(event) => setRole(event.target.value)}
+            placeholder="e.g. Honourable Minister"
+            className="border-emerald-200 text-black focus-visible:ring-emerald-200"
+          />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="link" className="block text-sm font-medium text-slate-700">
-            Website link
+          <Label htmlFor="ministry" className="block text-sm font-medium text-slate-700">
+            Ministry
           </Label>
-          <Input
-            id="link"
-            name="link"
-            type="url"
-            value={link}
-            onChange={(event) => setLink(event.target.value)}
-            placeholder="https://example.com"
-            className="border-emerald-200 text-black focus-visible:ring-emerald-200"
+          <textarea
+            id="ministry"
+            name="ministry"
+            value={ministry}
+            onChange={(event) => setMinistry(event.target.value)}
+            rows={4}
+            placeholder="Ministry details"
+            className="w-full rounded-xl border border-emerald-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:ring-2 focus:ring-emerald-200"
           />
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="logo" className="block text-sm font-medium text-slate-700">
-            Logo image
+            Photo
           </Label>
 
           <Input
@@ -146,7 +125,7 @@ export default function PartnerForm({
             <div className="mt-3 overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/50 p-3">
               <img
                 src={currentPreview.startsWith('blob:') ? currentPreview : `/storage/${currentPreview}`}
-                alt="Partner preview"
+                alt="Leadership preview"
                 className="h-40 w-40 rounded-lg object-cover"
               />
             </div>

@@ -81,8 +81,8 @@ export default function Index({ about = [] }: IndexProps) {
                 <thead className="bg-emerald-50/70 text-slate-700">
                   <tr>
                     <th className="px-4 py-3 font-semibold">Description</th>
-                    <th className="px-4 py-3 font-semibold">Reason to attend</th>
-                    <th className="px-4 py-3 font-semibold">Objectives</th>
+                    <th className="px-4 py-3 font-semibold">Vision</th>
+                    <th className="px-4 py-3 font-semibold">Mission</th>
                     <th className="px-4 py-3 font-semibold">Eligibility</th>
                     <th className="px-4 py-3 text-right font-semibold">Actions</th>
                   </tr>

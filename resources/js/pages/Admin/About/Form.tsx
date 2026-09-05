@@ -276,14 +276,14 @@ export default function AboutForm({
 
         <div className="space-y-2">
           <Label htmlFor="reason_to_attend" className="block text-sm font-medium text-slate-700">
-            Reason to attend
+            Vision
           </Label>
           {renderToolbar(reasonToAttendEditor, 'reason_to_attend')}
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="objectives" className="block text-sm font-medium text-slate-700">
-            Objectives
+            Mission
           </Label>
           {renderToolbar(objectivesEditor, 'objectives')}
         </div>

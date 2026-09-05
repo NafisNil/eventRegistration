@@ -80,12 +80,14 @@ class PartnerController extends Controller
 
             'logo' => 'nullable|image|max:2048', // Max size 2MB
             'partnership_category_id' => 'nullable|exists:partnership_categories,id',
+            'link' => 'nullable|string',
 
         ]);
         $partner = Partner::create([
             'name' => $validated['name'],
             'logo' => $this->uploadLogo($request),
             'partnership_category_id' => $validated['partnership_category_id'] ?? null,
+            'link' => $validated['link'] ?? null,
 
         ]);
         return redirect()->route('partners.index')->with('success', 'Partner created successfully.');
@@ -122,10 +124,12 @@ class PartnerController extends Controller
             'name' => 'required|string|max:255',
             'logo' => 'nullable|image|max:2048', // Max size 2MB
             'partnership_category_id' => 'nullable|exists:partnership_categories,id',
+            'link' => 'nullable|string',
         ]);
         $partner->update([
             'name' => $validated['name'],
             'partnership_category_id' => $validated['partnership_category_id'] ?? null,
+            'link' => $validated['link'] ?? null,
         ]);
         if ($request->hasFile('logo')) {
             $this->deleteImage($partner->logo);

@@ -7,6 +7,7 @@ use App\Models\EventStat;
 use App\Models\Announcement;
 use App\Models\Guest;
 use App\Models\Hero;
+use App\Models\Leadership;
 use App\Models\Location;
 use App\Models\Partner;
 use App\Models\ProgramHighlight;
@@ -28,7 +29,7 @@ class FrontendController extends Controller
 {
     public function index()
     {
-        return Inertia::render('welcome', [
+        return Inertia::render('Index', [
             'hero' => Hero::latest()->first(),
             'eventStat' => EventStat::latest()->first(),
             'about' => About::latest()->first(),
@@ -36,8 +37,10 @@ class FrontendController extends Controller
             'programHighlights' => ProgramHighlight::latest()->get(),
             'schedules' => Schedule::latest()->get(),
             'partners' => Partner::with('partnershipCategory')->latest()->get(),
+            'leaderships' => Leadership::latest()->get(),
             'location' => Location::latest()->first(),
             'socialMedia' => SocialMedia::latest()->first(),
+            'participantTypes' => ParticipantType::latest()->get(),
         ]);
     }
 

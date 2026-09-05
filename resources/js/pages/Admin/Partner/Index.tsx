@@ -7,6 +7,7 @@ interface Partner {
   id: number;
   name: string;
   partnership_category_id: number;
+  link?: string | null;
   logo?: string | null;
   featured?: boolean | number | null;
   partnership_category?: {
@@ -99,6 +100,7 @@ export default function Index({ partners = [] }: IndexProps) {
                   <tr>
                     <th className="px-4 py-3 font-semibold">Name</th>
                     <th className="px-4 py-3 font-semibold">Category</th>
+                    <th className="px-4 py-3 font-semibold">Website</th>
                     <th className="px-4 py-3 font-semibold">Logo</th>
                     <th className="px-4 py-3 font-semibold">Featured</th>
                     <th className="px-4 py-3 text-right font-semibold">Actions</th>
@@ -111,6 +113,20 @@ export default function Index({ partners = [] }: IndexProps) {
                       <td className="px-4 py-4 font-medium text-slate-800">{partner.name}</td>
                       <td className="px-4 py-4 text-slate-700">
                         {partner.partnership_category?.name ?? partner.partnership_category_id ?? '—'}
+                      </td>
+                      <td className="px-4 py-4 text-slate-700">
+                        {partner.link ? (
+                          <a
+                            href={partner.link}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="break-all text-emerald-700 underline decoration-emerald-300 underline-offset-2 hover:text-emerald-900"
+                          >
+                            {partner.link}
+                          </a>
+                        ) : (
+                          '—'
+                        )}
                       </td>
                       <td className="px-4 py-4">
                         {partner.logo ? (

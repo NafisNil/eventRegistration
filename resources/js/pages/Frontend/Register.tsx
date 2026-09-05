@@ -1,501 +1,145 @@
-import React, { useEffect, useState } from 'react';
-import { Head, router } from '@inertiajs/react';
-import Swal from 'sweetalert2';
-import {
-  CalendarDays,
-  Clock3,
-  MapPin,
-  ShieldCheck,
-} from 'lucide-react';
-import { Header } from '@/components/Frontend/Header';
-import { Footer } from '@/components/Frontend/Footer';
+import { Head } from '@inertiajs/react';
+import React from 'react';
+import { LandingFooter } from '@/components/Frontend/LandingFooter';
+import { LandingNavigation } from '@/components/Frontend/LandingNavigation';
+import { LandingRegistration } from '@/components/Frontend/LandingRegistration';
 
-interface EventStatRecord {
-  event_name?: string | null;
-  event_date?: string | null;
-  time?: string | null;
-  end_time?: string | null;
-  venue?: string | null;
-  registration_deadline?: string | null;
-}
+type ParticipantTypeModel = {
+    id?: number | string;
+    name?: string | null;
+};
 
-interface AboutRecord {
-  description?: string | null;
-}
+type LocationModel = {
+    address?: string | null;
+    phone?: string | null;
+    email?: string | null;
+};
 
-interface LocationRecord {
-  address?: string | null;
-  email?: string | null;
-  phone?: string | null;
-}
+type SocialMediaModel = {
+    id?: number | string;
+    facebook?: string | null;
+    linkedin?: string | null;
+    youtube?: string | null;
+    twitter?: string | null;
+};
 
-interface SocialMediaRecord {
-  facebook?: string | null;
-  linkedin?: string | null;
-  youtube?: string | null;
-  twitter?: string | null;
-}
+export default function RegisterPage({
+    participantTypes,
+    location,
+    socialMedia,
+}: {
+    participantTypes?: ParticipantTypeModel[] | null;
+    location?: LocationModel | null;
+    socialMedia?: SocialMediaModel | SocialMediaModel[] | null;
+}) {
+    return (
+        <>
+            <Head title="Registration" />
 
-interface ParticipantTypeOption {
-  id?: number | string | null;
-  name?: string | null;
-}
+            <div className="world-habitat-day frontend-register-page">
+                <style>{`
+                    * { box-sizing: border-box; }
+                    .frontend-register-page a { color: inherit; text-decoration: none; }
+                    .frontend-register-page { min-height: 100vh; background: linear-gradient(180deg, #f5faf7 0%, #edf7f2 100%); color: #123e30; }
+                    .frontend-register-page nav { position: fixed; top: 0; width: 100%; z-index: 10; color: white; background: rgba(13,30,26,.96); box-shadow: 0 10px 28px rgba(0,0,0,0.16); }
+                    .frontend-register-page .nav-inner { position: relative; width: 100%; padding: 14px 5%; display: flex; justify-content: space-between; align-items: center; }
+                    .frontend-register-page .brand { font-weight: 800; font-size: 19px; letter-spacing: 0.2px; }
+                    .frontend-register-page .brand small { display: block; color: #ebd6a3; font-size: 10px; letter-spacing: 2px; font-weight: 700; }
+                    .frontend-register-page .nav-actions { display: flex; align-items: center; gap: 22px; }
+                    .frontend-register-page .links { display: flex; gap: 22px; font-size: 14px; font-weight: 600; align-items: center; }
+                    .frontend-register-page .links a { opacity: 0.9; transition: opacity 0.2s ease, transform 0.2s ease; }
+                    .frontend-register-page .links a:hover { opacity: 1; transform: translateY(-1px); }
+                    .frontend-register-page .menu-toggle { display: none; width: 42px; height: 42px; border-radius: 12px; border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.08); align-items: center; justify-content: center; flex-direction: column; gap: 5px; cursor: pointer; }
+                    .frontend-register-page .menu-toggle span { width: 18px; height: 2px; background: white; border-radius: 999px; display: block; }
+                    .frontend-register-page .mobile-btn { display: none; }
+                    .frontend-register-page .btn { display: inline-block; background: linear-gradient(135deg, #d7b77a 0%, #b98942 100%); color: #fff !important; padding: 12px 22px; border-radius: 999px; font-weight: 800; border: 0; cursor: pointer; box-shadow: 0 16px 30px rgba(184,137,66,.28); transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease; text-decoration: none; letter-spacing: 0.02em; }
+                    .frontend-register-page .btn:hover { transform: translateY(-2px); box-shadow: 0 18px 35px rgba(184,137,66,.35); filter: saturate(1.08); }
 
-interface RegisterProps {
-  eventStat?: EventStatRecord | null;
-  about?: AboutRecord | null;
-  location?: LocationRecord | null;
-  socialMedia?: SocialMediaRecord | null;
-  participantTypes?: ParticipantTypeOption[];
-}
+                    .frontend-register-page .register { padding: 132px 5% 82px; }
+                    .frontend-register-page .wrap { max-width: 1150px; margin: 0 auto; }
+                    .frontend-register-page .head { text-align: center; max-width: 720px; margin: 0 auto 38px; }
+                    .frontend-register-page .eyebrow { color: #b98942; font-size: 12px; font-weight: 800; letter-spacing: 2px; }
+                    .frontend-register-page .head h2 { font-size: clamp(30px, 3vw, 44px); margin: 8px 0 0; color: #123e30; line-height: 1.2; font-weight: 800; }
+                    .frontend-register-page form { max-width: 900px; margin: 0 auto; background: #fff; padding: 32px; border-radius: 24px; box-shadow: 0 16px 40px rgba(22,59,47,.10); border: 1px solid rgba(98,138,128,.16); }
+                    .frontend-register-page .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+                    .frontend-register-page .field { display: flex; flex-direction: column; gap: 6px; }
+                    .frontend-register-page .field.full { grid-column: 1 / -1; }
+                    .frontend-register-page .field label { font-size: 13px; font-weight: 700; }
+                    .frontend-register-page .field input,
+                    .frontend-register-page .field select,
+                    .frontend-register-page .field textarea { padding: 13px; border: 1px solid #d9e5df; border-radius: 11px; font-family: inherit; font-size: 14px; }
+                    .frontend-register-page .field textarea { resize: vertical; }
+                    .frontend-register-page .submit { width: 100%; margin-top: 18px; border: none; }
 
-const districtOptions = Array.from(new Set([
-  'Dhaka',
-  'Chattogram',
-  'Rajshahi',
-  'Khulna',
-  'Barishal',
-  'Sylhet',
-  'Rangpur',
-  'Mymensingh',
-  'Cumilla',
-  'Faridpur',
-  'Gazipur',
-  'Narayanganj',
-  'Jessore',
-  'Bogura',
-  'Dinajpur',
-  'Noakhali',
-  'Tangail',
-  'Pabna',
-  'Kushtia',
-  'Brahmanbaria',
-  'Jhalokathi',
-  'Sherpur',
-  'Sunamganj',
-  'Habiganj',
-  'Sirajganj',
-  'Lalmonirhat',
-  'Thakurgaon',
-  'Panchagarh',
-  'Naogaon',
-  'Natore',
-  'Joypurhat',
-  'Meherpur',
-  'Chuadanga',
-  'Magura',
-  'Jhenaidah',
-  'Satkhira',
-  'Bagerhat',
-  'Kurigram',
-  'Gaibandha',
-  'Madaripur',
-  'Shariatpur',
-  'Bhola',
-  'Jhalokati',
-  'Pirojpur',
-  'Barguna',
-  'Feni',
-  'Lakshmipur',
-  'Cox\'s Bazar',
-  'Bandarban',
-  'Rangamati',
-  'Khagrachhari',
-  'Other',
-]));
+                    .frontend-register-page .site-footer { background: #0d2b3f; color: #8fa7b5; padding: 56px 5% 10px; position: relative; overflow: hidden; border-top-left-radius: 26px; border-top-right-radius: 26px; }
+                    .frontend-register-page .site-footer::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 8% 0%, rgba(38, 167, 132, 0.13), transparent 28%), radial-gradient(circle at 92% 100%, rgba(237, 188, 67, 0.08), transparent 25%); pointer-events: none; }
+                    .frontend-register-page .footer-shell { position: relative; }
+                    .frontend-register-page .footer-inner { max-width: 1150px; margin: 0 auto; display: grid; grid-template-columns: 1.8fr 1fr 1.1fr 1.2fr; gap: 34px; align-items: start; }
+                    .frontend-register-page .footer-brand-line { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+                    .frontend-register-page .footer-logo-badge { width: 32px; height: 32px; border-radius: 12px; background: linear-gradient(160deg, #f2c44b, #dbab30); color: #0d2b3f; display: grid; place-items: center; font-size: 10px; font-weight: 800; }
+                    .frontend-register-page .footer-brand-title { margin: 0; color: #ffffff; font-size: clamp(20px, 1.3vw, 34px); line-height: 1.1; font-weight: 800; }
+                    .frontend-register-page .footer-brand-sub { margin: 6px 0 0; color: #607887; font-size: 11px; letter-spacing: 1.2px; font-weight: 600; text-transform: uppercase; }
+                    .frontend-register-page .footer-brand-copy { color: #95acb8; font-size: 16px; line-height: 1.8; max-width: 560px; margin: 8px 0 24px; }
+                    .frontend-register-page .footer-social-label { color: #7f98a6; font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+                    .frontend-register-page .footer-social-list { display: flex; gap: 10px; }
+                    .frontend-register-page .footer-social-btn { width: 32px; height: 32px; border-radius: 14px; border: 1px solid rgba(172,196,210,.35); background: rgba(255,255,255,.03); color: #f1f6f9; display: grid; place-items: center; font-size: 16px; font-weight: 800; text-decoration: none; transition: transform 0.2s ease, border-color 0.2s ease; }
+                    .frontend-register-page .footer-social-btn:hover { transform: translateY(-2px); border-color: rgba(231,192,88,.62); }
+                    .frontend-register-page .footer-col-title { margin: 2px 0 16px; color: #ffffff; font-size: 18px; line-height: 1.1; font-weight: 800; }
+                    .frontend-register-page .footer-link-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+                    .frontend-register-page .footer-link-list a { color: #a9bfcb; font-size: 12px; line-height: 1.15; text-decoration: none; font-weight: 600; }
+                    .frontend-register-page .footer-link-list a:hover { color: #ffffff; }
+                    .frontend-register-page .footer-link-list-muted a { color: #90a8b6; }
+                    .frontend-register-page .footer-contact-col { display: grid; gap: 12px; }
+                    .frontend-register-page .footer-contact-card { display: flex; gap: 12px; align-items: center; padding: 14px 14px; border-radius: 16px; background: rgba(145,171,188,0.12); border: 1px solid rgba(172,196,210,.2); }
+                    .frontend-register-page .footer-contact-icon { width: 32px; height: 32px; border-radius: 12px; display: grid; place-items: center; background: rgba(168,191,205,.16); color: #dbab30; font-weight: 800; font-size: 20px; flex-shrink: 0; }
+                    .frontend-register-page .footer-contact-card small { display: block; color: #8ea5b2; font-size: 17px; line-height: 1.2; }
+                    .frontend-register-page .footer-contact-card strong { display: block; color: #f5fbff; font-size: 24px; letter-spacing: 1px; line-height: 1.12; }
+                    .frontend-register-page .footer-meta-row { max-width: 1150px; margin: 36px auto 0; padding: 16px 0; border-top: 1px solid rgba(190,208,219,.2); border-bottom: 1px solid rgba(190,208,219,.2); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+                    .frontend-register-page .footer-meta-left { display: inline-flex; align-items: center; gap: 12px; color: #8da4b2; font-size: 14px; }
+                    .frontend-register-page .footer-status-dot { width: 10px; height: 10px; border-radius: 999px; background: #41c6a2; box-shadow: 0 0 0 6px rgba(65,198,162,.12); }
+                    .frontend-register-page .footer-meta-link { color: #f0c54f; text-decoration: none; font-size: 18px; font-weight: 800; }
+                    .frontend-register-page .footer-contact-inline { max-width: 1150px; margin: 10px auto 0; display: flex; flex-wrap: wrap; gap: 20px; color: #6f8694; font-size: 12px; }
+                    .frontend-register-page .bottom-bar { max-width: 1150px; margin: 20px auto 0; text-align: center; color: #6b8290; font-size: 12px; position: relative; }
 
-export default function RegisterPage({ eventStat, about, location, socialMedia, participantTypes = [] }: RegisterProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [districtSearch, setDistrictSearch] = useState('');
-  const [isDistrictOpen, setIsDistrictOpen] = useState(false);
-
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    gender: '',
-    organization: '',
-    designation: '',
-    district: '',
-    address: '',
-    other_info: '',
-    logo: null as File | null,
-    participation_type_id: '',
-  });
-
-  const filteredDistrictOptions = districtOptions.filter((district) =>
-    district.toLowerCase().includes(districtSearch.toLowerCase())
-  );
-
-  useEffect(() => {
-    setDistrictSearch(form.district || '');
-  }, [form.district]);
-
-  const eventName = eventStat?.event_name || 'National Innovation & Digital Governance Summit 2026';
-  const footerDescription = about?.description || 'A one-day national summit bringing together policymakers, technologists, academics and civil society to shape the next decade of digital public infrastructure.';
-  const footerEmail = location?.email || 'secretariat@digitalsummit.gov.bd';
-
-  const eventDate = eventStat?.event_date || '14 November 2026';
-  const time = eventStat?.time || '09:00 AM';
-  const endTime = eventStat?.end_time || '05:30 PM';
-  const eventVenue = location?.address || 'Hall A, Grand National Convention Centre, 12 Republic Avenue, Dhaka 1207';
-  const registrationDeadline = eventStat?.registration_deadline
-    ? new Date(eventStat.registration_deadline).toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      })
-    : '1 November 2026';
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsSubmitting(true);
-
-    const formData = new FormData();
-
-    Object.entries({
-      name: form.name,
-      email: form.email,
-      phone: form.phone,
-      gender: form.gender,
-      participation_type_id: form.participation_type_id,
-      organization: form.organization,
-      designation: form.designation,
-      district: form.district,
-      address: form.address,
-      other_info: form.other_info,
-    }).forEach(([key, value]) => {
-      if (value) {
-        formData.append(key, value.toString());
-      }
-    });
-
-    if (form.logo) {
-      formData.append('logo', form.logo);
-    }
-
-    router.post('/user_register', formData, {
-      forceFormData: true,
-      preserveScroll: true,
-      onStart: () => {
-        setIsSubmitting(true);
-      },
-      onSuccess: () => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Registration completed',
-          text: 'Your registration has been submitted successfully. Please check your email for your unique code and QR code.',
-          timer: 2500,
-          showConfirmButton: false,
-        });
-
-        setForm({
-          name: '',
-          email: '',
-          phone: '',
-          gender: '',
-          organization: '',
-          designation: '',
-          district: '',
-          address: '',
-          other_info: '',
-          logo: null,
-          participation_type_id: '',
-        });
-      },
-      onError: (errors) => {
-        const errorMessages = Object.values(errors || {}).filter(Boolean);
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Registration failed',
-          text: errorMessages[0] || 'Please review the form and try again.',
-        });
-      },
-      onFinish: () => {
-        setIsSubmitting(false);
-      },
-    });
-  };
-
-  return (
-    <div className="min-h-screen bg-[#f7faf5] text-slate-900">
-      <Header eventName={eventName} />
-      
-
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-        <div className="grid items-stretch gap-8 lg:grid-cols-12">
-          <section className="flex flex-col rounded-[1.5rem] border border-emerald-100 bg-white p-5 shadow-[0_10px_28px_rgba(15,23,42,0.04)] md:p-7 lg:col-span-7">
-            <h1 className="text-[2.2rem] font-semibold tracking-[-0.06em] text-slate-800 md:text-[2.4rem]">
-              Participant details
-            </h1>
-
-            <form id="registration-form" onSubmit={handleSubmit} className="mt-7 flex flex-1 flex-col justify-between space-y-5">
-              <div className="space-y-5">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    <span className="mb-2 block">
-                      Full name <span className="text-red-500">*</span>
-                    </span>
-                    <input
-                      type="text"
-                      value={form.name}
-                      onChange={(event) => setForm({ ...form, name: event.target.value })}
-                      className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-base text-slate-800 outline-none transition focus:border-slate-400"
-                      required
-                    />
-                  </label>
-
-                  <label className="block text-sm font-medium text-slate-700">
-                    <span className="mb-2 block">
-                      Email address <span className="text-red-500">*</span>
-                    </span>
-                    <input
-                      type="email"
-                      value={form.email}
-                      onChange={(event) => setForm({ ...form, email: event.target.value })}
-                      className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-base text-slate-800 outline-none transition focus:border-slate-400"
-                      required
-                    />
-                  </label>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    <span className="mb-2 block">
-                      Mobile number <span className="text-red-500">*</span>
-                    </span>
-                    <input
-                      type="text"
-                      value={form.phone}
-                      onChange={(event) => setForm({ ...form, phone: event.target.value })}
-                      className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-base text-slate-800 outline-none transition focus:border-slate-400"
-                      required
-                    />
-                  </label>
-
-                  <label className="block text-sm font-medium text-slate-700">
-                    <span className="mb-2 block">
-                      Gender <span className="text-red-500">*</span>
-                    </span>
-                    <div className="relative">
-                      <select
-                        value={form.gender}
-                        onChange={(event) => setForm({ ...form, gender: event.target.value })}
-                        className="w-full appearance-none rounded-xl border border-slate-300 bg-white px-3 py-2.5 pr-10 text-base text-slate-800 outline-none transition focus:border-slate-400"
-                        required
-                      >
-                        <option value="">Select</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                      </select>
-                      <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-500">⌄</span>
-                    </div>
-                  </label>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    <span className="mb-2 block">
-                      Participant type <span className="text-red-500">*</span>
-                    </span>
-                    <div className="relative">
-                      <select
-                        value={form.participation_type_id}
-                        onChange={(event) => setForm({ ...form, participation_type_id: event.target.value })}
-                        className="w-full appearance-none rounded-xl border border-slate-300 bg-white px-3 py-2.5 pr-10 text-base text-slate-800 outline-none transition focus:border-slate-400"
-                        required
-                      >
-                        <option value="">Select</option>
-                        {participantTypes.map((type) => (
-                          <option key={type.id ?? type.name} value={String(type.id ?? '')}>
-                            {type.name || 'Unnamed type'}
-                          </option>
-                        ))}
-                      </select>
-                      <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-500">⌄</span>
-                    </div>
-                  </label>
-
-                  <label className="block text-sm font-medium text-slate-700">
-                    <span className="mb-2 block">
-                      Designation / Department <span className="text-red-500">*</span>
-                    </span>
-                    <input
-                      type="text"
-                      value={form.designation}
-                      onChange={(event) => setForm({ ...form, designation: event.target.value })}
-                      className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-base text-slate-800 outline-none transition focus:border-slate-400"
-                      required
-                    />
-                  </label>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    <span className="mb-2 block">
-                      District / City <span className="text-red-500">*</span>
-                    </span>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        value={districtSearch}
-                        onFocus={() => setIsDistrictOpen(true)}
-                        onChange={(event) => {
-                          const value = event.target.value;
-                          setDistrictSearch(value);
-                          setIsDistrictOpen(true);
-                          setForm((currentForm) => ({ ...currentForm, district: value }));
-                        }}
-                        placeholder="Search district"
-                        className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 pr-10 text-base text-slate-800 outline-none transition focus:border-slate-400"
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setIsDistrictOpen((open) => !open)}
-                        className="absolute inset-y-0 right-3 flex items-center text-slate-500"
-                        aria-label="Toggle district options"
-                      >
-                        ⌄
-                      </button>
-
-                      {isDistrictOpen && (
-                        <div className="absolute z-20 mt-2 max-h-56 w-full overflow-y-auto rounded-xl border border-slate-200 bg-white p-1 shadow-lg">
-                          {filteredDistrictOptions.length > 0 ? (
-                            filteredDistrictOptions.map((district) => (
-                              <button
-                                key={district}
-                                type="button"
-                                onClick={() => {
-                                  setForm((currentForm) => ({ ...currentForm, district }));
-                                  setDistrictSearch(district);
-                                  setIsDistrictOpen(false);
-                                }}
-                                className="flex w-full items-center rounded-lg px-3 py-2 text-left text-sm text-slate-700 transition hover:bg-slate-100"
-                              >
-                                {district}
-                              </button>
-                            ))
-                          ) : (
-                            <div className="px-3 py-2 text-sm text-slate-500">No district found</div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </label>
-
-                  <label className="block text-sm font-medium text-slate-700">
-                    <span className="mb-2 block">
-                      Organisation / Institution/Company <span className="text-red-500">*</span>
-                    </span>
-                    <input
-                      type="text"
-                      value={form.organization}
-                      onChange={(event) => setForm({ ...form, organization: event.target.value })}
-                      className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-base text-slate-800 outline-none transition focus:border-slate-400"
-                      required
-                    />
-                  </label>
-                </div>
-
-                <label className="block text-sm font-medium text-slate-700">
-                  <span className="mb-2 block">Address</span>
-                  <input
-                    type="text"
-                    value={form.address}
-                    onChange={(event) => setForm({ ...form, address: event.target.value })}
-                    className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-base text-slate-800 outline-none transition focus:border-slate-400"
-                  />
-                </label>
-
-                <label className="block text-sm font-medium text-slate-700">
-                  <span className="mb-2 block">Profile photo (optional)</span>
-                  <div className="rounded-xl border border-dashed border-slate-300 bg-white px-3 py-3">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(event) => setForm({ ...form, logo: event.target.files?.[0] || null })}
-                      className="block w-full text-sm text-slate-500 file:mr-4 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:font-medium file:text-slate-700"
-                    />
-                  </div>
-                </label>
-
-                <label className="block text-sm font-medium text-slate-700">
-                  <span className="mb-2 block">Other relevant information</span>
-                  <textarea
-                    rows={3}
-                    value={form.other_info}
-                    onChange={(event) => setForm({ ...form, other_info: event.target.value })}
-                    placeholder="Dietary requirements, accessibility needs, workshop interests..."
-                    className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-base text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-slate-400"
-                  />
-                </label>
-              </div>
-
-              {/* Submit Button placed inside the Form Column */}
-              <div className="pt-4">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`w-full rounded-xl px-5 py-3 text-base font-medium text-white shadow-[0_10px_24px_rgba(16,185,129,0.18)] transition ${
-                    isSubmitting
-                      ? 'cursor-not-allowed bg-slate-400 opacity-80'
-                      : 'bg-emerald-600 hover:bg-emerald-500'
-                  }`}
-                >
-                  {isSubmitting ? 'Submitting...' : 'Submit registration'}
-                </button>
-              </div>
-            </form>
-          </section>
-
-          <aside className="flex flex-col justify-between space-y-6 lg:col-span-5">
-            <div className="rounded-[1.5rem] border border-emerald-100 bg-white p-5 shadow-[0_10px_28px_rgba(15,23,42,0.04)] md:p-7">
-              <h2 className="text-[2rem] font-semibold tracking-[-0.06em] text-slate-800">Event details</h2>
-
-              <div className="mt-6 space-y-4 text-slate-700">
-                <div className="flex items-start gap-3 text-[0.9rem]">
-                  <CalendarDays className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
-                  <span>{eventDate}<br />{time} </span>
-                </div>
-
-                <div className="flex items-start gap-3 text-[0.9rem]">
-                  <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
-                  <div
-                    className="[&_p]:m-0 [&_p]:leading-7 [&_strong]:font-semibold [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5"
-                    dangerouslySetInnerHTML={{ __html: eventVenue }}
-                  />
-                </div>
-
-                <div className="flex items-start gap-3 text-[0.9rem]">
-                  <Clock3 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
-                  <span>Registration closes : {registrationDeadline}</span>
-                </div>
-              </div>
+                    @media (max-width: 1100px) {
+                        .frontend-register-page .footer-inner { grid-template-columns: 1fr 1fr; }
+                        .frontend-register-page .footer-col-title { font-size: 28px; }
+                        .frontend-register-page .footer-link-list a { font-size: 18px; }
+                        .frontend-register-page .footer-meta-link { font-size: 18px; }
+                    }
+                    @media (max-width: 850px) {
+                        .frontend-register-page .nav-inner { padding: 12px 16px; }
+                        .frontend-register-page .desktop-btn { display: none; }
+                        .frontend-register-page .menu-toggle { display: inline-flex; }
+                        .frontend-register-page .links { position: absolute; top: calc(100% + 8px); left: 16px; right: 16px; display: none; flex-direction: column; align-items: flex-start; gap: 16px; padding: 18px 16px; border-radius: 18px; background: rgba(14, 60, 47, 0.96); border: 1px solid rgba(255,255,255,.08); box-shadow: 0 18px 40px rgba(0,0,0,.18); }
+                        .frontend-register-page .links.open { display: flex; }
+                        .frontend-register-page .links a { font-size: 15px; }
+                        .frontend-register-page .mobile-btn { display: inline-block; margin-top: 4px; }
+                        .frontend-register-page .register { padding-top: 112px; }
+                        .frontend-register-page .grid { grid-template-columns: 1fr; }
+                        .frontend-register-page form { padding: 22px 16px; border-radius: 18px; }
+                        .frontend-register-page .field.full { grid-column: auto; }
+                    }
+                    @media (max-width: 720px) {
+                        .frontend-register-page .site-footer { border-top-left-radius: 20px; border-top-right-radius: 20px; }
+                        .frontend-register-page .footer-inner { grid-template-columns: 1fr; gap: 24px; }
+                        .frontend-register-page .footer-logo-badge { width: 52px; height: 52px; font-size: 26px; }
+                        .frontend-register-page .footer-brand-title { font-size: 26px; }
+                        .frontend-register-page .footer-brand-copy { font-size: 14px; line-height: 1.7; }
+                        .frontend-register-page .footer-social-label { font-size: 20px; }
+                        .frontend-register-page .footer-social-btn { width: 30px; height: 30px; font-size: 16px; border-radius: 12px; }
+                        .frontend-register-page .footer-col-title { font-size: 20px; margin-bottom: 10px; }
+                        .frontend-register-page .footer-link-list a { font-size: 18px; }
+                        .frontend-register-page .footer-contact-card strong { font-size: 28px; }
+                        .frontend-register-page .footer-contact-card small { font-size: 13px; }
+                        .frontend-register-page .footer-meta-row { flex-direction: column; align-items: flex-start; }
+                        .frontend-register-page .footer-meta-link { font-size: 20px; }
+                    }
+                `}</style>
+                <LandingNavigation />
+                <LandingRegistration participantTypes={participantTypes} />
+                <LandingFooter location={location} socialMedia={socialMedia} />
             </div>
-
-            <div className="flex-1 rounded-[1.5rem] border border-emerald-100 bg-emerald-50 p-5 shadow-[0_10px_28px_rgba(15,23,42,0.04)] md:p-7">
-              <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
-                  <ShieldCheck className="h-5 w-5" />
-                </div>
-                <h3 className="text-[1.5rem] font-semibold tracking-[-0.04em] text-slate-800 md:text-[1.8rem]">
-                  One registration per person
-                </h3>
-              </div>
-
-              <p className="mt-4 text-base leading-7 text-slate-700">
-                Duplicate submissions with the same email address or mobile number are automatically rejected. All registrations are reviewed by the secretariat before final confirmation.
-              </p>
-            </div>
-          </aside>
-          
-        </div>
-      </main>
-
-      <Footer eventName={eventName} description={footerDescription} email={footerEmail} socialMedia={socialMedia} />
-    </div>
-  );
+        </>
+    );
 }
