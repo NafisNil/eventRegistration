@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from '@inertiajs/react';
 type LocationModel = {
     address?: string | null;
     phone?: string | null;
@@ -52,7 +52,7 @@ export const LandingFooter: React.FC<{ location?: LocationModel | null; socialMe
                             <li><a href="#program">সময়সূচি</a></li>
                             <li><a href="#ministry-leadership">নেতৃত্ব</a></li>
                             <li><a href="#support">দপ্তর/সংস্থা</a></li>
-                            <li><a href="#register">রেজিস্ট্রেশন</a></li>
+                            <li><Link href="/user_register">রেজিস্ট্রেশন</Link></li>
                         </ul>
                     </div>
 

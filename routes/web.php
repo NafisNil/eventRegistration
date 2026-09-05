@@ -38,6 +38,9 @@ Route::get('/user_register', [FrontendController::class, 'register'])->name('use
 Route::post('/user_register', [FrontendController::class, 'storeUserRegistration'])->name('user.register.store');
 Route::get('/registration-qr/{registration}', [FrontendController::class, 'showQrCode'])->name('registration.qr');
 
+Route::get('gate-pass', [FrontendController::class, 'gatePass'])->name('gate.pass');
+Route::post('gate-pass', [FrontendController::class, 'gatePassCheck'])->name('gate.pass.store');
+
 Route::middleware(['auth', 'verified'])->group(function () {
    // Route::inertia('dashboard', 'dashboard')->name('dashboard');
    Route::get('dashboard', [AdminController::class, 'index'])->name('dashboard');

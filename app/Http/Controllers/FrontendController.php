@@ -183,4 +183,30 @@ class FrontendController extends Controller
         return response(Storage::disk('public')->get($qrFilePath), 200)
             ->header('Content-Type', 'image/png');
     }
+
+    public function gatePass()
+    {
+        return Inertia::render('Frontend/GatePass');
+    }
+
+    public function gatePassCheck(Request $request)
+    {
+        $validated = $request->validate([
+            'unique_code' => 'required|string|max:255',
+        ]);
+
+        $user = UserRegistration::with('participantType')
+            ->where('unique_code', $validated['unique_code'])
+            ->first();
+
+        if (! $user) {
+            return redirect()->back()->withErrors([
+                'unique_code' => 'দুঃখিত! কোনো তথ্য পাওয়া যায়নি। সঠিক কোড দিন।',
+            ]);
+        }
+
+        return Inertia::render('Frontend/GatePass', [
+            'user' => $user,
+        ]);
+    }
 }

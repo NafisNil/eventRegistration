@@ -1,15 +1,18 @@
+import { Link } from '@inertiajs/react';
 import React, { useState } from 'react';
-import { Link } from "@inertiajs/react";
-
+import Logo from '/logo/logo.jpeg';
 export const LandingNavigation: React.FC = () => {
     const [menuOpen, setMenuOpen] = useState(false);
 
     const navLinks = [
-        { href: '/#about', label: 'About' },
-        { href: '/#program', label: 'Program' },
-        { href: '/#ministry-leadership', label: 'Leadership' },
+        { href: '/#about', label: 'পরিচিতি' },
+        { href: '/#program', label: 'প্রোগ্রাম' },
+        { href: '/#ministry-leadership', label: 'নেতৃত্ব' },
 
-        { href: '/#venue', label: 'Venue' },
+        { href: '/#venue', label: 'স্থান' },
+
+        { href: '/#support', label: 'দপ্তর/সংস্থা' },
+        { href: '/#contact', label: 'যোগাযোগ' },
     ];
 
     const closeMenu = () => setMenuOpen(false);
@@ -18,8 +21,20 @@ export const LandingNavigation: React.FC = () => {
         <nav id="nav" className={menuOpen ? 'menu-open' : ''}>
             <div className="nav-inner">
                 <Link href="/" className="brand" onClick={closeMenu}>
-                    WORLD HABITAT DAY<small>2026 • BANGLADESH</small>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+                        <img
+                            src="/storage/logo/lo.svg"
+                            alt="World Habitat Day Logo"
+                            style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }}
+                        />
+                        <span>
+                            গৃহায়ন ও গণপূর্ত মন্ত্রণালয় <br></br>
+                            <small className='text-green-500'>গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</small>
+                        </span>
+                    </span>
                 </Link>
+
+
 
                 <div className="nav-actions">
                     <div className={`links ${menuOpen ? 'open' : ''}`}>
@@ -31,9 +46,6 @@ export const LandingNavigation: React.FC = () => {
     
                     </div>
 
-                    <Link href="/user_register" className="btn desktop-btn" onClick={closeMenu}>
-                        Register Now
-                    </Link>
 
                     <button
                         type="button"

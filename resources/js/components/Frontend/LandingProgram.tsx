@@ -116,7 +116,7 @@ export const LandingProgram: React.FC<{ schedules?: ScheduleModel[] | null }> = 
                                     style={{
                                         margin: '0 0 10px',
                                         color: '#123654',
-                                        fontSize: 'clamp(24px, 1.2vw, 52px)',
+                                        fontSize: 'clamp(16px, 4.2vw, 30px)',
                                         lineHeight: 1.18,
                                         fontWeight: 800,
                                     }}

@@ -62,12 +62,12 @@ export default function RegisterPage({
                     .frontend-register-page .head h2 { font-size: clamp(30px, 3vw, 44px); margin: 8px 0 0; color: #123e30; line-height: 1.2; font-weight: 800; }
                     .frontend-register-page form { max-width: 900px; margin: 0 auto; background: #fff; padding: 32px; border-radius: 24px; box-shadow: 0 16px 40px rgba(22,59,47,.10); border: 1px solid rgba(98,138,128,.16); }
                     .frontend-register-page .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-                    .frontend-register-page .field { display: flex; flex-direction: column; gap: 6px; }
+                    .frontend-register-page .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
                     .frontend-register-page .field.full { grid-column: 1 / -1; }
                     .frontend-register-page .field label { font-size: 13px; font-weight: 700; }
                     .frontend-register-page .field input,
                     .frontend-register-page .field select,
-                    .frontend-register-page .field textarea { padding: 13px; border: 1px solid #d9e5df; border-radius: 11px; font-family: inherit; font-size: 14px; }
+                    .frontend-register-page .field textarea { width: 100%; max-width: 100%; min-width: 0; display: block; box-sizing: border-box; padding: 13px; border: 1px solid #d9e5df; border-radius: 11px; font-family: inherit; font-size: 14px; }
                     .frontend-register-page .field textarea { resize: vertical; }
                     .frontend-register-page .submit { width: 100%; margin-top: 18px; border: none; }
 

@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import React from 'react';
 
 type HeroModel = {
@@ -47,19 +48,19 @@ export const LandingHero: React.FC<{
 
                 <div className="hero-stat-grid" aria-label="Event statistics">
                     <div className="hero-stat-card">
-                        <span className="hero-stat-number">30</span>
+                        <span className="hero-stat-number" id="d">00</span>
                         <span className="hero-stat-label">দিন</span>
                     </div>
                     <div className="hero-stat-card">
-                        <span className="hero-stat-number">21</span>
+                        <span className="hero-stat-number" id="h">00</span>
                         <span className="hero-stat-label">ঘণ্টা</span>
                     </div>
                     <div className="hero-stat-card">
-                        <span className="hero-stat-number">44</span>
+                        <span className="hero-stat-number" id="m">00</span>
                         <span className="hero-stat-label">মিনিট</span>
                     </div>
                     <div className="hero-stat-card">
-                        <span className="hero-stat-number">34</span>
+                        <span className="hero-stat-number" id="s">00</span>
                         <span className="hero-stat-label">সেকেন্ড</span>
                     </div>
                 </div>
@@ -80,7 +81,7 @@ export const LandingHero: React.FC<{
                 </div>
 
                 <div className="hero-actions">
-                    <a href="#register" className="hero-primary-btn">রেজিস্ট্রেশন করুন →</a>
+                    <Link href="/user_register" className="hero-primary-btn">রেজিস্ট্রেশন করুন →</Link>
                     <a href="#program" className="hero-secondary-btn">বিস্তারিত দেখুন</a>
                 </div>
             </div>

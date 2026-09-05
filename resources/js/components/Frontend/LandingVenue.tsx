@@ -1,4 +1,6 @@
+
 import React from 'react';
+import { Link } from '@inertiajs/react';
 
 type EventStatModel = {
     event_name?: string | null;
@@ -37,7 +39,7 @@ export const LandingVenue: React.FC<{ eventStat?: EventStatModel | null; locatio
                             {eventTime ? <div>🕘 {eventTime}</div> : null}
                             {contact ? <div>📞 {contact}</div> : null}
                         </div>
-                        <a className="btn" href="#register">Register for Event</a>
+                        <Link className="btn" href="/user_register">Register for Event</Link>
                     </div>
                     <div className="map">
                         {mapUrl ? (
