@@ -15,6 +15,8 @@ interface EventStat {
   target_participants?: string | null;
   organizer?: string | null;
   venue?: string | null;
+  username?: string | null;
+  password?: string | null;
 }
 
 interface EditProps {
@@ -70,6 +72,8 @@ export default function Edit({ eventStat }: EditProps) {
             target_participants: eventStat.target_participants,
             organizer: eventStat.organizer,
             venue: eventStat.venue,
+            username: eventStat.username,
+            password: eventStat.password,
           }}
           submitLabel="Update Event Stat"
           onSubmit={handleSubmit}

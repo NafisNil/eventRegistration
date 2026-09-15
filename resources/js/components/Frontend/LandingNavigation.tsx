@@ -6,7 +6,7 @@ export const LandingNavigation: React.FC = () => {
 
     const navLinks = [
         { href: '/#about', label: 'পরিচিতি' },
-        { href: '/#program', label: 'প্রোগ্রাম' },
+        { href: '/schedule_list', label: 'প্রোগ্রাম' },
         { href: '/#ministry-leadership', label: 'নেতৃত্ব' },
 
         { href: '/#venue', label: 'স্থান' },

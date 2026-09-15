@@ -12,6 +12,8 @@ interface EventStat {
   registration_deadline: string;
   target_participants?: string | null;
   organizer?: string | null;
+  username?: string | null;
+  password?: string | null;
 }
 
 interface IndexProps {
@@ -92,6 +94,8 @@ export default function Index({ eventStats = [] }: IndexProps) {
                     <th className="px-4 py-3 font-semibold">Registration Deadline</th>
                     <th className="px-4 py-3 font-semibold">Target Participants</th>
                     <th className="px-4 py-3 font-semibold">Organizer</th>
+                    <th className="px-4 py-3 font-semibold">Username</th>
+                    <th className="px-4 py-3 font-semibold">Password</th>
                     <th className="px-4 py-3 text-right font-semibold">Actions</th>
                   </tr>
                 </thead>
@@ -113,6 +117,8 @@ export default function Index({ eventStats = [] }: IndexProps) {
                       <td className="px-4 py-4">{eventStat.registration_deadline}</td>
                       <td className="px-4 py-4">{eventStat.target_participants ?? '—'}</td>
                       <td className="px-4 py-4">{eventStat.organizer ?? '—'}</td>
+                      <td className="px-4 py-4">{eventStat.username ?? '—'}</td>
+                      <td className="px-4 py-4">{eventStat.password ?? '—'}</td>
 
                       <td className="px-4 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">

@@ -12,6 +12,7 @@ interface PartnershipCategory {
 interface Partner {
   id: number;
   name: string;
+  eng_name?: string | null;
   partnership_category_id: number;
   link?: string | null;
   logo?: string | null;
@@ -64,6 +65,7 @@ export default function Edit({ partner, partnershipCategories = [] }: EditProps)
         <PartnerForm
           initialData={{
             name: partner.name,
+            eng_name: partner.eng_name ?? null,
             partnership_category_id: partner.partnership_category_id,
             link: partner.link ?? null,
             logo: partner.logo ?? null,

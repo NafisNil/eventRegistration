@@ -17,6 +17,7 @@ use App\Mail\QRSendMail;
 use App\Models\ContactUs;
 use Illuminate\Http\Request;
 use App\Models\UserRegistration;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -27,6 +28,8 @@ use Inertia\Inertia;
 
 class FrontendController extends Controller
 {
+    private const USER_REGISTRATION_AUTH_SESSION_KEY = 'user_registration_authenticated';
+
     public function index()
     {
         return Inertia::render('Index', [
@@ -192,11 +195,13 @@ class FrontendController extends Controller
     public function gatePassCheck(Request $request)
     {
         $validated = $request->validate([
-            'unique_code' => 'required|string|max:255',
+            // Either unique_code or phone must be provided
+            'unique_code' => 'nullable|string|max:255',
         ]);
 
         $user = UserRegistration::with('participantType')
             ->where('unique_code', $validated['unique_code'])
+            ->orWhere('phone', $validated['unique_code'])
             ->first();
 
         if (! $user) {
@@ -208,5 +213,70 @@ class FrontendController extends Controller
         return Inertia::render('Frontend/GatePass', [
             'user' => $user,
         ]);
+    }
+
+    //show user registration details
+    public function showUserRegistration(Request $request)
+    {
+        $isAuthenticated = (bool) $request->session()->get(self::USER_REGISTRATION_AUTH_SESSION_KEY, false);
+        $eventStat = EventStat::latest()->first();
+
+        if (! $isAuthenticated) {
+            return Inertia::render('Frontend/UserRegistration', [
+                'isAuthenticated' => false,
+                'eventStat' => $eventStat,
+            ]);
+        }
+
+        return Inertia::render('Frontend/UserRegistration', [
+            'isAuthenticated' => true,
+            'eventStat' => $eventStat,
+            'registrations' => UserRegistration::with('participantType')->latest()->get(),
+        ]);
+    }
+
+    public function userRegistrationLogin(Request $request)
+    {
+        $validatedData = $request->validate([
+            'username' => 'required|string|max:255',
+            'password' => 'required|string|max:255',
+        ]);
+
+        $eventStat = EventStat::latest()->first();
+
+        if (! $eventStat || blank($eventStat->username) || blank($eventStat->password)) {
+            return redirect()->route('user.registration.show')->withErrors([
+                'auth' => 'ইভেন্ট লগইন তথ্য সেট করা নেই। আগে অ্যাডমিন প্যানেল থেকে username/password সেট করুন।',
+            ]);
+        }
+
+        $usernameMatches = hash_equals((string) $eventStat->username, (string) $validatedData['username']);
+        $passwordMatches = $this->eventPasswordMatches((string) $validatedData['password'], (string) $eventStat->password);
+
+        if (! $usernameMatches || ! $passwordMatches) {
+            return redirect()->route('user.registration.show')
+                ->withErrors(['auth' => 'ভুল username বা password। আবার চেষ্টা করুন।'])
+                ->withInput($request->only('username'));
+        }
+
+        $request->session()->put(self::USER_REGISTRATION_AUTH_SESSION_KEY, true);
+
+        return redirect()->route('user.registration.show');
+    }
+
+    public function userRegistrationLogout(Request $request)
+    {
+        $request->session()->forget(self::USER_REGISTRATION_AUTH_SESSION_KEY);
+
+        return redirect()->route('user.registration.show');
+    }
+
+    private function eventPasswordMatches(string $inputPassword, string $storedPassword): bool
+    {
+        if ($inputPassword === '' || $storedPassword === '') {
+            return false;
+        }
+
+        return hash_equals($storedPassword, $inputPassword) || Hash::check($inputPassword, $storedPassword);
     }
 }

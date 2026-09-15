@@ -12,6 +12,7 @@ interface ScheduleFormProps {
     description?: string;
     location?: string;
     keynote_speaker?: string;
+    day_no?: number;
   };
   submitLabel?: string;
   processing?: boolean;
@@ -30,6 +31,7 @@ export default function ScheduleForm({
   const [description, setDescription] = useState(initialData?.description ?? '');
   const [location, setLocation] = useState(initialData?.location ?? '');
   const [keynoteSpeaker, setKeynoteSpeaker] = useState(initialData?.keynote_speaker ?? '');
+  const [dayNo, setDayNo] = useState(initialData?.day_no ?? 0);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -41,6 +43,7 @@ export default function ScheduleForm({
     formData.append('description', description.trim());
     formData.append('location', location.trim());
     formData.append('keynote_speaker', keynoteSpeaker.trim());
+    formData.append('day_no', dayNo.toString());
 
     onSubmit(formData);
   };
@@ -87,6 +90,21 @@ export default function ScheduleForm({
             onChange={(event) => setTitle(event.target.value)}
             placeholder="Schedule title"
             required
+            className="border-emerald-200 text-black focus-visible:ring-emerald-200"
+          />
+        </div>
+
+        <div className="space-y-2 md:col-span-2">
+          <Label htmlFor="day_no" className="block text-sm font-medium text-slate-700">
+            Day No
+          </Label>
+          <Input
+            id="day_no"
+            name="day_no"
+            type="number"
+            value={dayNo}
+            onChange={(event) => setDayNo(Number(event.target.value))}
+            placeholder="e.g. 1"
             className="border-emerald-200 text-black focus-visible:ring-emerald-200"
           />
         </div>

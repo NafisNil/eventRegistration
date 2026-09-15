@@ -11,6 +11,7 @@ interface Schedule {
   location?: string | null;
   keynote_speaker?: string | null;
   description?: string | null;
+  day_no?: number | null;
 
 }
 
@@ -94,6 +95,7 @@ export default function Index({ schedules = [] }: IndexProps) {
                     <th className="px-4 py-3 font-semibold">Time</th>
                     <th className="px-4 py-3 font-semibold">Badge</th>
                     <th className="px-4 py-3 font-semibold">Location</th>
+                    <th className="px-4 py-3 font-semibold">Day No</th>
                     <th className="px-4 py-3 font-semibold">Keynote Speaker</th>
                     <th className="px-4 py-3 text-right font-semibold">Actions</th>
                   </tr>
@@ -109,6 +111,7 @@ export default function Index({ schedules = [] }: IndexProps) {
                       <td className="px-4 py-4">{schedule.time ?? '—'}</td>
                       <td className="px-4 py-4">{schedule.badge ?? '—'}</td>
                       <td className="px-4 py-4">{schedule.location ?? '—'}</td>
+                      <td className="px-4 py-4">{schedule.day_no ?? '—'}</td>
                       <td className="px-4 py-4">{schedule.keynote_speaker ?? '—'}</td>
 
                       <td className="px-4 py-4 text-right">

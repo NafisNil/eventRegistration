@@ -64,4 +64,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
    Route::post('partners/{partner}/toggle-featured', [PartnerController::class, 'toggleFeatured'])->name('partners.toggle-featured');
 });
 
+Route::get('/user-registration-show', [FrontendController::class, 'showUserRegistration'])->name('user.registration.show');
+Route::post('/user-registration-show/login', [FrontendController::class, 'userRegistrationLogin'])->name('user.registration.login');
+Route::post('/user-registration-show/logout', [FrontendController::class, 'userRegistrationLogout'])->name('user.registration.logout');
+
 require __DIR__.'/settings.php';

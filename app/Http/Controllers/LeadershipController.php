@@ -132,7 +132,7 @@ class LeadershipController extends Controller
         Storage::disk('public')->makeDirectory('leadership');
 
         $image = $this->imageManager()->decodePath($file->getRealPath());
-        $image->resize(360, 450);
+        $image->resize(325, 340);
         $image->scaleDown(1400)->save(Storage::disk('public')->path($fileName));
 
         return $fileName;

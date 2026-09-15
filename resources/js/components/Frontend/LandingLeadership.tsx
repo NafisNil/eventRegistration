@@ -46,9 +46,6 @@ export const LandingLeadership: React.FC<{ leaderships?: LeadershipModel[] | nul
         }))
         : fallbackLeadership;
 
-    const featuredLeader = leaders[0];
-    const secondaryLeaders = leaders.slice(1);
-
     return (
         <section className="ministry-leadership" id="ministry-leadership">
             <div className="leadership-head">
@@ -56,23 +53,10 @@ export const LandingLeadership: React.FC<{ leaderships?: LeadershipModel[] | nul
                 <h2>মন্ত্রণালয়ের সম্মানিত নেতৃত্ব</h2>
             </div>
 
-            {featuredLeader ? (
-                <div className="leadership-featured">
-                    <article className="leader-card leader-card-featured" key={featuredLeader.id}>
-                        <div className="leader-photo">
-                            <img src={featuredLeader.logo} alt={featuredLeader.name ?? 'Leadership member'} loading="lazy" />
-                        </div>
-                        <div className="leader-role">{featuredLeader.role}</div>
-                        <h3 className="leader-name">{featuredLeader.name}</h3>
-                        <p className="leader-ministry" dangerouslySetInnerHTML={{ __html: featuredLeader.ministry ?? '' }} />
-                    </article>
-                </div>
-            ) : null}
-
-            {secondaryLeaders.length > 0 ? (
+            {leaders.length > 0 ? (
                 <div className="leadership-grid leadership-grid-secondary">
-                    {secondaryLeaders.map((leader) => (
-                        <article className="leader-card" key={leader.id}>
+                    {leaders.map((leader, index) => (
+                        <article className={`leader-card ${index === 2 ? 'leader-card-centered' : ''}`.trim()} key={leader.id}>
                             <div className="leader-photo">
                                 <img src={leader.logo} alt={leader.name ?? 'Leadership member'} loading="lazy" />
                             </div>

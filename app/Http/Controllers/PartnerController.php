@@ -77,6 +77,7 @@ class PartnerController extends Controller
         //
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'eng_name' => 'nullable|string|max:255',
 
             'logo' => 'nullable|image|max:2048', // Max size 2MB
             'partnership_category_id' => 'nullable|exists:partnership_categories,id',
@@ -88,6 +89,7 @@ class PartnerController extends Controller
             'logo' => $this->uploadLogo($request),
             'partnership_category_id' => $validated['partnership_category_id'] ?? null,
             'link' => $validated['link'] ?? null,
+            'eng_name' => $validated['eng_name'] ?? null,
 
         ]);
         return redirect()->route('partners.index')->with('success', 'Partner created successfully.');
@@ -122,12 +124,14 @@ class PartnerController extends Controller
         //
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'eng_name' => 'nullable|string|max:255',
             'logo' => 'nullable|image|max:2048', // Max size 2MB
             'partnership_category_id' => 'nullable|exists:partnership_categories,id',
             'link' => 'nullable|string',
         ]);
         $partner->update([
             'name' => $validated['name'],
+            'eng_name' => $validated['eng_name'] ?? null,
             'partnership_category_id' => $validated['partnership_category_id'] ?? null,
             'link' => $validated['link'] ?? null,
         ]);

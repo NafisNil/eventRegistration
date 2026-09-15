@@ -42,6 +42,8 @@ class EventStatController extends Controller
             'time' => 'required|string',
             'registration_deadline' => 'required|date',
             'venue' => 'required|string',
+            'username' => 'nullable|string',
+            'password' => 'nullable|string',
             
         ]);
 
@@ -80,6 +82,8 @@ class EventStatController extends Controller
             'time' => 'required|string',
             'registration_deadline' => 'required|date',
             'venue' => 'required|string',
+            'username' => 'nullable|string',
+            'password' => 'nullable|string',
         ]);
         $eventStat->update($request->all());
         return redirect()->route('event-stats.index')->with('success', 'Event Stat updated successfully.');

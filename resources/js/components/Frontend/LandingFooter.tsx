@@ -29,7 +29,11 @@ export const LandingFooter: React.FC<{ location?: LocationModel | null; socialMe
                 <div className="footer-inner">
                     <div className="footer-brand-col">
                         <div className="footer-brand-line">
-                            <div className="footer-logo-badge">WHD</div>
+                                                    <img
+                            src="/storage/logo/logo.jpeg"
+                            alt="World Habitat Day Logo"
+                            style={{ width: '64px', height: '48px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0 }}
+                        />
                             <div>
                                 <h3 className="footer-brand-title">বিশ্ব বসতি দিবস ২০২৬</h3>
                                 <p className="footer-brand-sub">WORLD HABITAT DAY BANGLADESH</p>
@@ -49,7 +53,7 @@ export const LandingFooter: React.FC<{ location?: LocationModel | null; socialMe
                         <ul className="footer-link-list">
                             <li><a href="#about">পরিচিতি</a></li>
                             <li><a href="#highlights">ভিশন ও মিশন</a></li>
-                            <li><a href="#program">সময়সূচি</a></li>
+                            <li><Link href="/schedule_list">সময়সূচি</Link></li>
                             <li><a href="#ministry-leadership">নেতৃত্ব</a></li>
                             <li><a href="#support">দপ্তর/সংস্থা</a></li>
                             <li><Link href="/user_register">রেজিস্ট্রেশন</Link></li>

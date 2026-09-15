@@ -3,6 +3,7 @@ import React from 'react';
 type PartnerModel = {
     id?: number | string;
     name?: string | null;
+    eng_name?: string | null;
     logo?: string | null;
     link?: string | null;
     featured?: boolean | number | null;
@@ -55,6 +56,7 @@ export const LandingSupport: React.FC<{ partners?: PartnerModel[] | null }> = ({
             id: String(partner.id ?? partner.name ?? `partner-${index}`),
             category: partner.partnership_category?.name?.trim() || 'অন্যান্য অংশীদার',
             name: partner.name || 'Partner',
+            eng_name: partner.eng_name || '',
             subtitle: partner.partnership_category?.name || 'Official Partner',
             alt: partner.name || 'Partner logo',
             src: partner.logo ? (partner.logo.startsWith('http') ? partner.logo : `/storage/${partner.logo}`) : 'https://upload.wikimedia.org/wikipedia/commons/7/73/BD_Gov_logo.svg',
@@ -106,7 +108,7 @@ export const LandingSupport: React.FC<{ partners?: PartnerModel[] | null }> = ({
                                             ) : (
                                                 <div className="support-partner-name">{item.name}</div>
                                             )}
-                                            <div className="support-partner-sub">{item.subtitle}</div>
+                                            <div className="support-partner-sub">{item.eng_name}</div>
                                         </div>
                                     </article>
                                 ))}

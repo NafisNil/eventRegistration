@@ -11,6 +11,7 @@ interface Schedule {
   badge?: string | null;
   location?: string | null;
   keynote_speaker?: string | null;
+  day_no?: number | null;
 
   description?: string | null;
 
@@ -67,6 +68,7 @@ export default function Edit({ schedule }: EditProps) {
             badge: schedule.badge ?? '',
             location: schedule.location ?? '',
             keynote_speaker: schedule.keynote_speaker ?? '',
+            day_no: schedule.day_no ?? '',
 
             description: schedule.description ?? '',
 

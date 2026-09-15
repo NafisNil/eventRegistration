@@ -43,6 +43,7 @@ class ScheduleController extends Controller
             'badge' => ['nullable', 'string', 'max:255'],
             'location' => ['nullable', 'string', 'max:255'],
             'keynote_speaker' => ['nullable', 'string', 'max:255'],
+            'day_no' => ['nullable', 'integer'], 
         ]);
 
         Schedule::create([
@@ -52,6 +53,7 @@ class ScheduleController extends Controller
             'badge' => $validated['badge'] ?? null,
             'location' => $validated['location'] ?? null,
             'keynote_speaker' => $validated['keynote_speaker'] ?? null,
+            'day_no' => $validated['day_no'] ?? null,
         ]);
 
         return redirect()->route('schedules.index')->with('success', 'Schedule created successfully.');
@@ -89,6 +91,7 @@ class ScheduleController extends Controller
             'badge' => ['nullable', 'string', 'max:255'],
             'location' => ['nullable', 'string', 'max:255'],
             'keynote_speaker' => ['nullable', 'string', 'max:255'],
+            'day_no' => ['nullable', 'integer'],
         ]);
         $schedule->update([
             'title' => $validated['title'],
@@ -97,6 +100,7 @@ class ScheduleController extends Controller
             'badge' => $validated['badge'] ?? null,
             'location' => $validated['location'] ?? null,
             'keynote_speaker' => $validated['keynote_speaker'] ?? null,
+            'day_no' => $validated['day_no'] ?? null,
         ]);
         return redirect()->route('schedules.index')->with('success', 'Schedule updated successfully.');
     }

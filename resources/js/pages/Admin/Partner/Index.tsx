@@ -6,6 +6,7 @@ import AdminLayout from '@/layouts/AdminLayout';
 interface Partner {
   id: number;
   name: string;
+  eng_name?: string | null;
   partnership_category_id: number;
   link?: string | null;
   logo?: string | null;
@@ -99,6 +100,7 @@ export default function Index({ partners = [] }: IndexProps) {
                 <thead className="bg-emerald-50/70 text-slate-700">
                   <tr>
                     <th className="px-4 py-3 font-semibold">Name</th>
+                    <th className="px-4 py-3 font-semibold">English Name</th>
                     <th className="px-4 py-3 font-semibold">Category</th>
                     <th className="px-4 py-3 font-semibold">Website</th>
                     <th className="px-4 py-3 font-semibold">Logo</th>
@@ -111,6 +113,7 @@ export default function Index({ partners = [] }: IndexProps) {
                   {partners.map((partner) => (
                     <tr key={partner.id} className="align-top">
                       <td className="px-4 py-4 font-medium text-slate-800">{partner.name}</td>
+                      <td className="px-4 py-4 text-slate-700">{partner.eng_name ?? '—'}</td>
                       <td className="px-4 py-4 text-slate-700">
                         {partner.partnership_category?.name ?? partner.partnership_category_id ?? '—'}
                       </td>

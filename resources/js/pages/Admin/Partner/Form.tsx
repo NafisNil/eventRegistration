@@ -12,6 +12,7 @@ interface PartnershipCategory {
 interface PartnerFormProps {
   initialData?: {
     name?: string;
+    eng_name?: string | null;
     partnership_category_id?: number | null;
     link?: string | null;
     logo?: string | null;
@@ -30,6 +31,7 @@ export default function PartnerForm({
   onSubmit,
 }: PartnerFormProps) {
   const [name, setName] = useState(initialData?.name ?? '');
+  const [engName, setEngName] = useState(initialData?.eng_name ?? '');
   const [partnershipCategoryId, setPartnershipCategoryId] = useState<number | ''>(
     initialData?.partnership_category_id ?? '',
   );
@@ -59,6 +61,7 @@ export default function PartnerForm({
 
     const formData = new FormData();
     formData.append('name', name.trim());
+    formData.append('eng_name', engName?.trim() ?? '');
     formData.append('partnership_category_id', String(partnershipCategoryId));
 
     if (link.trim()) {
@@ -88,6 +91,19 @@ export default function PartnerForm({
             onChange={(event) => setName(event.target.value)}
             placeholder="Partner name"
             required
+            className="border-emerald-200 text-black focus-visible:ring-emerald-200"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="eng_name" className="block text-sm font-medium text-slate-700">
+            English Name
+          </Label>
+          <Input
+            id="eng_name"
+            name="eng_name"
+            value={engName}
+            onChange={(event) => setEngName(event.target.value)}
+            placeholder="Partner English name"
             className="border-emerald-200 text-black focus-visible:ring-emerald-200"
           />
         </div>

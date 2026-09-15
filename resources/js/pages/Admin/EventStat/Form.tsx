@@ -19,6 +19,8 @@ interface EventStatFormProps {
     target_participants?: string | null;
     organizer?: string | null;
     venue?: string | null;
+    username?: string | null;
+    password?: string | null;
   };
   submitLabel?: string;
   processing?: boolean;
@@ -39,6 +41,8 @@ export default function EventStatForm({
   const [targetParticipants, setTargetParticipants] = useState(initialData?.target_participants ?? '');
   const [organizer, setOrganizer] = useState(initialData?.organizer ?? '');
   const [venue, setVenue] = useState(initialData?.venue ?? '');
+  const [username, setUsername] = useState(initialData?.username ?? '');
+  const [password, setPassword] = useState(initialData?.password ?? '');
 
   const editor = useEditor({
     extensions: [StarterKit, TextStyle, Color, FontSize],
@@ -80,6 +84,8 @@ export default function EventStatForm({
     formData.append('registration_deadline', registrationDeadline);
     formData.append('organizer', organizer);
     formData.append('venue', venue);
+    formData.append('username', username);
+    formData.append('password', password);
 
     if (targetParticipants.trim()) {
       formData.append('target_participants', targetParticipants);
@@ -269,7 +275,7 @@ export default function EventStatForm({
         </div>
 
 
-                <div className="space-y-2">
+          <div className="space-y-2">
           <Label htmlFor="organizer" className="block text-sm font-medium text-slate-700">
             Organizer 
           </Label>
@@ -296,6 +302,35 @@ export default function EventStatForm({
             className="w-full rounded-xl border border-emerald-200 bg-emerald-50/40 p-3 text-sm text-black outline-none transition focus:outline-none focus:ring-2 focus:ring-emerald-200"
           />
         </div>
+
+          <div className="space-y-2">
+          <Label htmlFor="username" className="block text-sm font-medium text-slate-700">
+            Username
+          </Label>
+          <Input
+            id="username"
+            name="username"
+            type="text"
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
+            className="border-emerald-200 text-black focus-visible:ring-emerald-200"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="password" className="block text-sm font-medium text-slate-700">
+            Password
+          </Label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            className="border-emerald-200 text-black focus-visible:ring-emerald-200"
+          />
+        </div>
+
       </div>
 
 

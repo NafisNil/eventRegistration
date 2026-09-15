@@ -8,7 +8,7 @@ type GatePassUser = {
 	phone?: string | null;
 	created_at?: string | null;
 	participation_type_id?: number | string | null;
-	participation_type?: {
+	participant_type?: {
 		id?: number | string;
 		name?: string | null;
 	} | null;
@@ -73,10 +73,12 @@ export default function GatePassPage() {
 	const [uniqueCode, setUniqueCode] = useState('');
 	const [statusText, setStatusText] = useState('');
 	const [statusColor, setStatusColor] = useState<'red' | 'green' | 'blue'>('red');
+	const [printedAt, setPrintedAt] = useState<string | null>(() => (user ? new Date().toISOString() : null));
+	const ministryLogoSrc = '/storage/gatepass_asset/ministry-logo2.png';
+	const habitatDayLogoSrc = '/storage/gatepass_asset/world-habitat-day.png';
 
-	const tokenType = user?.participation_type?.name
-		|| user?.participantType?.name
-		|| (user?.participation_type_id ? `PARTICIPANT-${user.participation_type_id}` : '--');
+	const participationTypeName = user?.participant_type?.name || user?.participantType?.name;
+	const tokenType = participationTypeName ? `PARTICIPANT-${participationTypeName}` : '--';
 
 	useEffect(() => {
 		if (!user) {
@@ -106,6 +108,9 @@ export default function GatePassPage() {
 		router.post('/gate-pass', { unique_code: uniqueCode.trim() }, {
 			preserveScroll: true,
 			preserveState: true,
+			onSuccess: () => {
+				setPrintedAt(new Date().toISOString());
+			},
 			onError: (errors) => {
 				const firstError = errors.unique_code || 'দুঃখিত! কোনো তথ্য পাওয়া যায়নি। সঠিক কোড দিন।';
 				setStatusColor('red');
@@ -119,70 +124,201 @@ export default function GatePassPage() {
 			<Head title="Gate Pass" />
 
 			<style>{`
-				@import url('https://fonts.googleapis.com/css2?family=Tiro+Bangla&display=swap');
+				@import url('https://fonts.googleapis.com/css2?family=Tiro+Bangla:wght@400;700&display=swap');
 
 				html,
 				body,
 				#app {
-					background-color: #eef2f5 !important;
 					min-height: 100%;
+					background: linear-gradient(120deg, #fef9f3 0%, #eef4ff 45%, #dce8ff 100%) !important;
 				}
 
 				body {
 					font-family: 'Tiro Bangla', Arial, sans-serif;
-					background-color: #eef2f5;
 					margin: 0;
 					padding: 0;
+					background: linear-gradient(120deg, #fef9f3 0%, #eef4ff 45%, #dce8ff 100%);
 				}
 
 				.gate-pass-page {
 					min-height: 100vh;
-					background-color: #eef2f5;
-					padding-top: 1px;
+					padding: 30px 20px;
+					box-sizing: border-box;
+				}
+
+				.gate-pass-layout {
+					max-width: 1280px;
+					margin: 0 auto;
+					display: grid;
+					grid-template-columns: 360px 1fr;
+					gap: 42px;
+					align-items: stretch;
+				}
+
+				.event-panel {
+					background: #fffdf9;
+					border-radius: 24px;
+					padding: 28px 28px 18px;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					box-shadow: 0 22px 45px rgba(17, 73, 130, 0.12);
+				}
+
+				.ministry-logo {
+					width: 220px;
+					height: auto;
+					margin-bottom: 12px;
+				}
+
+				.panel-divider {
+					width: 100%;
+					height: 2px;
+					background: linear-gradient(90deg, transparent 0%, #bccbe6 15%, #bccbe6 85%, transparent 100%);
+					margin: 18px 0;
+				}
+
+				.habitat-logo {
+					width: 100%;
+					max-width: 290px;
+					height: auto;
+					display: block;
+				}
+
+				.panel-slogan {
+					margin-top: 16px;
+					text-align: center;
+					line-height: 1.35;
+					font-size: 42px;
+					font-weight: 700;
+					color: #0f4f96;
 				}
 
 				.kiosk-container {
-					max-width: 450px;
-					margin: 40px auto;
+					position: relative;
 					background: #ffffff;
-					padding: 25px;
-					border-radius: 10px;
-					box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+					padding: 34px 56px 42px;
+					border-radius: 22px;
+					box-shadow: 0 20px 45px rgba(17, 73, 130, 0.16);
 					text-align: center;
+					overflow: hidden;
+				}
+
+				.kiosk-container::before,
+				.kiosk-container::after {
+					content: '';
+					position: absolute;
+					border-radius: 999px;
+					opacity: 0.82;
+				}
+
+				.kiosk-container::before {
+					width: 112px;
+					height: 112px;
+					top: -36px;
+					right: -22px;
+					background: radial-gradient(circle at 35% 35%, #ea679f 0%, #cc4d86 100%);
+				}
+
+				.kiosk-container::after {
+					width: 128px;
+					height: 128px;
+					top: -20px;
+					right: 44px;
+					background: radial-gradient(circle at 30% 30%, #80c995 0%, #4aa96f 100%);
+				}
+
+				.kiosk-content {
+					position: relative;
+					z-index: 1;
+				}
+
+				.form-header-logo {
+					width: 180px;
+					height: auto;
+					margin: 0 auto 6px;
+					display: block;
+				}
+
+				.form-divider {
+					width: 100%;
+					height: 2px;
+					background: linear-gradient(90deg, transparent 0%, #c7d4ea 14%, #c7d4ea 86%, transparent 100%);
+					margin: 12px 0 20px;
 				}
 
 				.kiosk-container h2 {
-					color: #333;
-					margin-bottom: 15px;
-					font-size: 22px;
+					color: #0f579f;
+					margin: 0 0 12px;
+					font-size: 60px;
+					line-height: 1.18;
+					font-weight: 700;
+				}
+
+				.kiosk-instruction {
+					font-size: 18px;
+					color: #111827;
+					margin: 0 0 18px;
 				}
 
 				.input-group {
-					margin-bottom: 15px;
+					margin-bottom: 18px;
+				}
+
+				.input-wrap {
+					display: flex;
+					align-items: center;
+					gap: 14px;
+					padding: 10px 18px;
+					border: 3px solid #1681e7;
+					border-radius: 12px;
+					background: #fff;
+					box-shadow: inset 0 1px 2px rgba(15, 87, 159, 0.12);
+				}
+
+				.input-icon {
+					font-size: 22px;
+					line-height: 1;
+					color: #1681e7;
 				}
 
 				.input-group input {
-					width: 80%;
-					padding: 10px;
-					font-size: 16px;
-					text-align: center;
-					border: 2px solid #007bff;
-					border-radius: 6px;
+					width: 100%;
+					padding: 10px 0;
+					font-size: 42px;
+					text-align: left;
+					border: none;
 					outline: none;
+					background: transparent;
+					font-family: inherit;
+				}
+
+				.input-group input::placeholder {
+					color: #9ca3af;
 				}
 
 				.btn-submit {
-					padding: 10px 20px;
-					font-size: 16px;
-					background-color: #28a745;
-					color: white;
+					display: inline-flex;
+					align-items: center;
+					justify-content: center;
+					gap: 12px;
+					min-width: 420px;
+					padding: 16px 26px;
+					font-size: 45px;
+					font-weight: 700;
+					background-color: #1fa74a;
+					color: #ffffff;
 					border: none;
-					border-radius: 6px;
+					border-radius: 14px;
 					cursor: pointer;
+					box-shadow: 0 12px 25px rgba(33, 128, 67, 0.26);
+					transition: transform 0.15s ease, box-shadow 0.2s ease;
 				}
 
 				.btn-submit:hover {
-					background-color: #218838;
+					background-color: #1b9842;
+					transform: translateY(-1px);
+					box-shadow: 0 14px 30px rgba(33, 128, 67, 0.32);
 				}
 
 				.btn-submit:disabled {
@@ -190,11 +326,111 @@ export default function GatePassPage() {
 					cursor: not-allowed;
 				}
 
+				.btn-icon {
+					font-size: 34px;
+					line-height: 1;
+				}
+
 				.error-msg {
-					color: red;
+					font-size: 16px;
 					font-weight: bold;
-					margin-top: 10px;
-					min-height: 24px;
+					margin-top: 14px;
+					min-height: 28px;
+				}
+
+				@media (max-width: 1060px) {
+					.gate-pass-layout {
+						grid-template-columns: 1fr;
+						max-width: 760px;
+					}
+
+					.event-panel {
+						padding: 24px;
+					}
+
+					.ministry-logo {
+						width: 190px;
+					}
+
+					.habitat-logo {
+						max-width: 260px;
+					}
+
+					.panel-slogan {
+						font-size: 34px;
+					}
+
+					.kiosk-container {
+						padding: 30px 28px 34px;
+					}
+
+					.kiosk-container h2 {
+						font-size: 46px;
+					}
+
+					.input-group input {
+						font-size: 34px;
+					}
+
+					.btn-submit {
+						min-width: 320px;
+						font-size: 34px;
+					}
+				}
+
+				@media (max-width: 640px) {
+					.gate-pass-page {
+						padding: 16px;
+					}
+
+					.gate-pass-layout {
+						gap: 18px;
+					}
+
+					.event-panel {
+						padding: 18px;
+						border-radius: 18px;
+					}
+
+					.panel-slogan {
+						font-size: 26px;
+					}
+
+					.kiosk-container {
+						padding: 22px 14px 26px;
+						border-radius: 18px;
+					}
+
+					.form-header-logo {
+						width: 150px;
+					}
+
+					.kiosk-container h2 {
+						font-size: 34px;
+					}
+
+					.kiosk-instruction {
+						font-size: 16px;
+					}
+
+					.input-wrap {
+						gap: 10px;
+						padding: 8px 12px;
+					}
+
+					.input-group input {
+						font-size: 26px;
+					}
+
+					.btn-submit {
+						min-width: 100%;
+						font-size: 26px;
+						padding: 12px 16px;
+					}
+
+					.btn-icon {
+						font-size: 24px;
+					}
 				}
 
 				#printable-token {
@@ -340,28 +576,44 @@ export default function GatePassPage() {
 			`}</style>
 
 			<div className="gate-pass-page">
-				<div className="kiosk-container">
-				<h2>স্বয়ংক্রিয় গেটপাস প্রিন্টিং</h2>
-				<p>আপনার ইমেইলে পাঠানো ইউনিক কোডটি লিখুন:</p>
+				<div className="gate-pass-layout">
+					<aside className="event-panel">
+						<img className="ministry-logo" src={ministryLogoSrc} alt="গৃহায়ন ও গণপূর্ত মন্ত্রণালয়" />
+						<div className="panel-divider" />
+						<img className="habitat-logo" src={habitatDayLogoSrc} alt="World Habitat Day" />
+						<div className="panel-slogan">সবার জন্য নিরাপদ<br />ও টেকসই আবাসন</div>
+					</aside>
 
-				<form id="searchForm" onSubmit={handleSubmit}>
-					<div className="input-group">
-						<input
-                            className="text-black"
-							ref={inputRef}
-							type="text"
-							id="uniqueCodeInput"
-							placeholder="উদাহরণ: BD-125"
-							required
-							autoFocus
-							value={uniqueCode}
-							onChange={(event) => setUniqueCode(event.target.value)}
-						/>
+					<div className="kiosk-container">
+						<div className="kiosk-content">
+							<img className="form-header-logo" src={ministryLogoSrc} alt="বাংলাদেশ সরকার" />
+							<div className="form-divider" />
+							<h2>স্বয়ংক্রিয় গেটপাস প্রিন্টিং</h2>
+							<p className="kiosk-instruction">আপনার <b>মোবাইল নাম্বার</b>  অথবা ইমেইলে পাঠানো <b>ইউনিক কোডটি</b> লিখুন</p>
+
+							<form id="searchForm" onSubmit={handleSubmit}>
+								<div className="input-group">
+									<div className="input-wrap">
+										<span className="input-icon" aria-hidden="true">✉</span>
+										<input
+											className="text-black"
+											ref={inputRef}
+											type="text"
+											id="uniqueCodeInput"
+											// placeholder="উদাহরণ: BD-125"
+											required
+											autoFocus
+											value={uniqueCode}
+											onChange={(event) => setUniqueCode(event.target.value)}
+										/>
+									</div>
+								</div>
+								<button type="submit" className="btn-submit"><span className="btn-icon" aria-hidden="true">🖨</span> টোকেন প্রিন্ট করুন</button>
+							</form>
+
+							<div id="statusMsg" className="error-msg" style={{ color: statusColor }}>{statusText}</div>
+						</div>
 					</div>
-					<button type="submit" className="btn-submit">টোকেন প্রিন্ট করুন</button>
-				</form>
-
-				<div id="statusMsg" className="error-msg" style={{ color: statusColor }}>{statusText}</div>
 				</div>
 
 				<div id="printable-token">
@@ -402,12 +654,12 @@ export default function GatePassPage() {
 							<tr>
 								<td className="label">তারিখ</td>
 								<td className="colon">:</td>
-								<td className="value" id="t-date">{formatDate(user?.created_at)}</td>
+								<td className="value" id="t-date">{formatDate(printedAt)}</td>
 							</tr>
 							<tr>
 								<td className="label">সময়</td>
 								<td className="colon">:</td>
-								<td className="value" id="t-time">{formatTime(user?.created_at)}</td>
+								<td className="value" id="t-time">{formatTime(printedAt)}</td>
 							</tr>
 						</tbody>
 					</table>
