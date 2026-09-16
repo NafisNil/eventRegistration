@@ -53,7 +53,7 @@ export default function Index({ heroes = [] }: IndexProps) {
             <p className="text-xs uppercase tracking-[0.2em] text-emerald-200">Media & Branding</p>
             <h1 className="mt-2 text-2xl font-bold">Hero Management</h1>
           </div>
-          {heroes.length === 0 ? (
+          {heroes.length <= 3 ? (
             <Link
               href="/heroes/create"
               className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-50"

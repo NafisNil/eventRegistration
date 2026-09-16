@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 type HeroModel = {
     description?: string | null;
@@ -14,9 +14,25 @@ type EventStatModel = {
 };
 
 export const LandingHero: React.FC<{
-    hero?: HeroModel | null;
+    hero?: HeroModel[] | HeroModel | null;
     eventStat?: EventStatModel | null;
 }> = ({ hero, eventStat }) => {
+    const heroItems = Array.isArray(hero) ? hero : hero ? [hero] : [];
+    const firstHero = heroItems[0] ?? null;
+    const [activeHeroIndex, setActiveHeroIndex] = useState(0);
+
+    useEffect(() => {
+        if (heroItems.length <= 1) {
+            return undefined;
+        }
+
+        const intervalId = globalThis.setInterval(() => {
+            setActiveHeroIndex((previous) => (previous + 1) % heroItems.length);
+        }, 5000);
+
+        return () => globalThis.clearInterval(intervalId);
+    }, [heroItems.length]);
+
     const eventName = eventStat?.event_name || 'WORLD HABITAT DAY 2026';
     const eventLocation = eventStat?.location || 'ঢাকা, বাংলাদেশ';
     const eventTime = eventStat?.time || '09:00 AM';
@@ -26,11 +42,11 @@ export const LandingHero: React.FC<{
         month: 'long',
         year: 'numeric',
     }).format(eventDate);
-    const heroDescription = hero?.description || 'নিজস্ব শহর, নিরাপদ পরিবেশ ও অন্তর্ভুক্তিমূলক নগর উন্নয়নে আমরা একসাথে কাজ করি।';
-    const heroImage = hero?.logo
-        ? hero.logo.startsWith('http')
-            ? hero.logo
-            : `/storage/${hero.logo}`
+    const heroDescription = firstHero?.description || 'নিজস্ব শহর, নিরাপদ পরিবেশ ও অন্তর্ভুক্তিমূলক নগর উন্নয়নে আমরা একসাথে কাজ করি।';
+    const heroImage = heroItems[activeHeroIndex]?.logo
+        ? heroItems[activeHeroIndex].logo.startsWith('http')
+            ? heroItems[activeHeroIndex].logo
+            : `/storage/${heroItems[activeHeroIndex].logo}`
         : 'https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1600&q=80';
 
     return (

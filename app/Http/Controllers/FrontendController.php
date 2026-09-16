@@ -33,7 +33,7 @@ class FrontendController extends Controller
     public function index()
     {
         return Inertia::render('Index', [
-            'hero' => Hero::latest()->first(),
+            'hero' => Hero::get(),
             'eventStat' => EventStat::latest()->first(),
             'about' => About::latest()->first(),
             'guests' => Guest::latest()->get(),
